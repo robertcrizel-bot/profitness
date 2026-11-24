@@ -1640,17 +1640,20 @@
         function normText(t) {
           return String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
         }
+        const usedModalityImages = new Set();
         document.querySelectorAll('#modalities-list .mod-item').forEach(card => {
           const kwRaw = card.getAttribute('data-modality-keywords') || '';
           const titleText = normText(card.querySelector('h3')?.textContent || '');
           const kws = [...kwRaw.split(',').map(k => normText(k.trim())).filter(Boolean), titleText];
           const match = entries.find(item => {
             const hay = normText((item.legenda || '') + ' ' + (item.nome || ''));
-            return kws.some(k => k.length > 2 && hay.includes(k));
+            return item.url && !usedModalityImages.has(item.url) &&
+              kws.some(k => k.length > 2 && hay.includes(k));
           });
           const imgEl = card.querySelector('img');
-          if (match && imgEl && match.url) {
+          if (match && imgEl) {
             imgEl.src = match.url;
+            usedModalityImages.add(match.url);
           }
         });
 
@@ -1800,7 +1803,21 @@
           const instaWithCaption = preferredInstagramFiles
             .map(file => parsed.find(p => p.origem === 'insta' && p.nome === file && p.legenda.length > 10))
             .filter(Boolean);
-          if (instaWithCaption.length) renderGalleryItems(instaWithCaption);
+
+          // Evita repetir fotos da mesma publicação (carrosséis do Instagram compartilham legenda).
+          const seenCaptions = new Set();
+          const uniqueGallery = instaWithCaption.filter(item => {
+            const key = item.legenda
+              .toLowerCase()
+              .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')
+              .replace(/#[^\\s]+/g, '')
+              .replace(/\\s+/g, ' ')
+              .trim();
+            if (!key || seenCaptions.has(key)) return false;
+            seenCaptions.add(key);
+            return true;
+          });
+          if (uniqueGallery.length) renderGalleryItems(uniqueGallery);
         }
       })();
 
