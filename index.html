@@ -1786,38 +1786,64 @@
 
           // Seleção editorial: prioriza publicações com conteúdo real sobre estrutura,
           // equipe, acompanhamento e modalidades; evita começar por fotos sem legenda do Maps.
-          const preferredInstagramFiles = [
-            '3683732669234576368.jpg',
-            '3679383720843326975.jpg',
-            '3768845410455333064.jpg',
-            '3661989013368440909.jpg',
-            '3567975411339868390.jpg',
-            '3668510736205193192.jpg',
-            '3770763467519217332.jpg',
-            '3431115198113964569.jpg',
-            '2668598397845305387.jpg',
-            '3489810832270518289.webp',
-            '3210068472116548658.jpg',
-            '3473620998680781438_3473620987221979289.jpg'
+          // Usa o catálogo inteiro: uma foto por publicação e seleção equilibrada por assunto.
+          const categoryRules = [
+            /equipe|professor|profissionais|personal|fundador|instrutor/i,
+            /inbody|bioimped|avaliação corporal|composição corporal/i,
+            /aulas coletivas|fitdance|dança|jump|pilates|muay thai|funcional/i,
+            /estrutura|ambiente|espaço|instalações|academia premium/i,
+            /equipamento|aparelhos|tecnologia|musculação/i,
+            /desafio|evento|aulão|competição|encerramento|aniversário/i,
+            /saúde|bem.?estar|qualidade de vida|atividade física/i
           ];
-          const instaWithCaption = preferredInstagramFiles
-            .map(file => parsed.find(p => p.origem === 'insta' && p.nome === file && p.legenda.length > 10))
-            .filter(Boolean);
+          const normalizeCaption = value => String(value || '')
+            .toLowerCase()
+            .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')
+            .replace(/https?:\\/\\/\\S+/g, '')
+            .replace(/#[^\\s]+/g, '')
+            .replace(/[\\u2800-\\u28ff\\u200b-\\u200f]/g, ' ')
+            .replace(/\\s+/g, ' ')
+            .trim();
 
-          // Evita repetir fotos da mesma publicação (carrosséis do Instagram compartilham legenda).
-          const seenCaptions = new Set();
-          const uniqueGallery = instaWithCaption.filter(item => {
-            const key = item.legenda
-              .toLowerCase()
-              .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')
-              .replace(/#[^\\s]+/g, '')
-              .replace(/\\s+/g, ' ')
-              .trim();
-            if (!key || seenCaptions.has(key)) return false;
-            seenCaptions.add(key);
-            return true;
+          const seenPosts = new Set();
+          const candidates = parsed
+            .filter(item => item.origem === 'insta' && item.legenda.length > 25)
+            .filter(item => {
+              const postId = item.nome.split('_')[0].replace(/\\.[^.]+$/, '');
+              if (!postId || seenPosts.has(postId)) return false;
+              seenPosts.add(postId);
+              const caption = normalizeCaption(item.legenda);
+              return caption.length > 25 &&
+                !/feliz natal|boas festas|dia das maes|dia do trabalho|parabens|curriculo|sorteio/i.test(caption);
+            });
+
+          const selected = [];
+          const usedFiles = new Set();
+          const usedCaptionKeys = new Set();
+          categoryRules.forEach(rule => {
+            const candidate = candidates.find(item => {
+              const captionKey = normalizeCaption(item.legenda);
+              return !usedFiles.has(item.url) && !usedCaptionKeys.has(captionKey) && rule.test(captionKey);
+            });
+            if (candidate) {
+              selected.push(candidate);
+              usedFiles.add(candidate.url);
+              usedCaptionKeys.add(normalizeCaption(candidate.legenda));
+            }
           });
-          if (uniqueGallery.length) renderGalleryItems(uniqueGallery);
+
+          // Completa com publicações diferentes, sem repetir a mesma legenda ou post.
+          candidates.forEach(item => {
+            if (selected.length >= 12) return;
+            const key = normalizeCaption(item.legenda);
+            if (!usedFiles.has(item.url) && !usedCaptionKeys.has(key)) {
+              selected.push(item);
+              usedFiles.add(item.url);
+              usedCaptionKeys.add(key);
+            }
+          });
+
+          if (selected.length) renderGalleryItems(selected);
         }
       })();
 
