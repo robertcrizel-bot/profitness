@@ -1673,9 +1673,15 @@
         galleryGrid.innerHTML = shown.map((item, idx) => {
           const isMaps = item.origem === 'maps';
           const badge = isMaps ? 'Google Maps • Estrutura' : 'Instagram • @academiaprofitness_sjrp';
-          const text = item.legenda || (isMaps
-            ? 'Estrutura completa da Profitness Academia em São José do Rio Pardo.'
-            : `Registro oficial #${idx + 1} da comunidade Profitness Academia.`);
+          const cleanCaption = String(item.legenda || '')
+            .replace(/https?:\/\/\S+/g, '')
+            .replace(/#[\p{L}\p{N}_]+/gu, '')
+            .replace(/[⠀⁣]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+          const text = cleanCaption || (isMaps
+            ? 'Registro da estrutura da Profitness Academia em São José do Rio Pardo.'
+            : 'Registro oficial da comunidade Profitness Academia.');
           return `
             <figure data-origin="${isMaps ? 'maps' : 'insta'}" class="pro-card rounded-2xl overflow-hidden bg-pro-card border border-pro-border flex flex-col">
               <div class="aspect-[4/3] bg-pro-black overflow-hidden">
@@ -1743,28 +1749,58 @@
         const csvText = await loadLocalText('ProFitness/CATALOGO_academiaprofitness_sjrp.csv')
           || await loadLocalText('CATALOGO_academiaprofitness_sjrp.csv');
         if (csvText) {
-          const lines = csvText.split(/\r?\n/).slice(1).filter(Boolean);
-          const parsed = [];
-          for (const line of lines) {
-            const parts = line.split(';');
-            if (parts.length >= 3) {
-              const origemRaw = (parts[1] || '').toLowerCase();
-              let arquivo = (parts[2] || '').trim().replace(/^academiaprofitness_sjrp\//i, 'ProFitness/');
-              const legenda = parts.slice(3).join(';').trim();
-              if (arquivo) {
-                parsed.push({
-                  url: arquivo,
-                  origem: origemRaw.includes('maps') ? 'maps' : 'insta',
-                  legenda,
-                  nome: arquivo.split('/').pop()
-                });
-              }
+          // Leitura correta do CSV, inclusive legendas com quebras de linha e ponto e vírgula.
+          function parseSemicolonCsv(input) {
+            const rows = [];
+            let row = [], value = '', quoted = false;
+            for (let i = 0; i < input.length; i++) {
+              const ch = input[i], next = input[i + 1];
+              if (quoted) {
+                if (ch === '"' && next === '"') { value += '"'; i++; }
+                else if (ch === '"') quoted = false;
+                else value += ch;
+              } else if (ch === '"') quoted = true;
+              else if (ch === ';') { row.push(value); value = ''; }
+              else if (ch === '\n') { row.push(value.replace(/\r$/, '')); rows.push(row); row = []; value = ''; }
+              else value += ch;
             }
+            if (value.length || row.length) { row.push(value.replace(/\r$/, '')); rows.push(row); }
+            return rows;
           }
-          const mapsEntries = parsed.filter(p => p.origem === 'maps').slice(0, 6);
-          const instaWithCaption = parsed.filter(p => p.origem === 'insta' && p.legenda.length > 10).slice(0, 6);
-          const merged = [...mapsEntries, ...instaWithCaption];
-          if (merged.length) renderGalleryItems(merged);
+
+          const parsed = parseSemicolonCsv(csvText.replace(/^\uFEFF/, '')).slice(1)
+            .filter(parts => parts.length >= 3 && parts[2])
+            .map(parts => {
+              const origemRaw = (parts[1] || '').toLowerCase();
+              const arquivo = (parts[2] || '').trim().replace(/^academiaprofitness_sjrp\//i, 'ProFitness/');
+              return {
+                url: arquivo,
+                origem: origemRaw.includes('maps') ? 'maps' : 'insta',
+                legenda: (parts.slice(3).join(';') || '').trim(),
+                nome: arquivo.split('/').pop()
+              };
+            });
+
+          // Seleção editorial: prioriza publicações com conteúdo real sobre estrutura,
+          // equipe, acompanhamento e modalidades; evita começar por fotos sem legenda do Maps.
+          const preferredInstagramFiles = [
+            '3683732669234576368.jpg',
+            '3679383720843326975.jpg',
+            '3768845410455333064.jpg',
+            '3661989013368440909.jpg',
+            '3567975411339868390.jpg',
+            '3668510736205193192.jpg',
+            '3770763467519217332.jpg',
+            '3431115198113964569.jpg',
+            '2668598397845305387.jpg',
+            '3489810832270518289.webp',
+            '3210068472116548658.jpg',
+            '3473620998680781438_3473620987221979289.jpg'
+          ];
+          const instaWithCaption = preferredInstagramFiles
+            .map(file => parsed.find(p => p.origem === 'insta' && p.nome === file && p.legenda.length > 10))
+            .filter(Boolean);
+          if (instaWithCaption.length) renderGalleryItems(instaWithCaption);
         }
       })();
 
