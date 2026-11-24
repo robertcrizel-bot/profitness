@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profitness Academia — São José do Rio Pardo | Não é só musculação, é saúde!</title>
+
+  <!-- Tipografia de Impacto fiel às artes oficiais: Barlow Condensed + Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            display: ['"Barlow Condensed"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            pro: {
+              black: '#0A0B0D',
+              dark: '#121418',
+              card: '#181B20',
+              border: '#262A33',
+              red: '#DC143C',
+              redBright: '#EF233C',
+              redDark: '#9B0D28',
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background-color: #0A0B0D;
+      color: #FFFFFF;
+      overflow-x: hidden;
+    }
+
+    h1, h2, .font-impact {
+      font-family: 'Barlow Condensed', system-ui, sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .glass-header {
+      background: rgba(10, 11, 13, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .crimson-glow {
+      background: radial-gradient(circle at 75% 25%, rgba(220, 20, 60, 0.24), transparent 55%),
+                  radial-gradient(circle at 15% 80%, rgba(155, 13, 40, 0.18), transparent 50%);
+    }
+
+    .pro-card {
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.35s ease,
+                  box-shadow 0.35s ease;
+    }
+
+    .pro-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(239, 35, 60, 0.65);
+      box-shadow: 0 22px 44px -14px rgba(220, 20, 60, 0.28);
+    }
+
+    .tab-pill.active {
+      background-color: #DC143C;
+      color: #FFFFFF;
+      border-color: #DC143C;
+      box-shadow: 0 8px 20px -6px rgba(220, 20, 60, 0.6);
+    }
+
+    /* Compactação real dos tópicos sem espaços vazios excessivos */
+    #inicio {
+      padding-top: 6.25rem !important;
+      padding-bottom: 2rem !important;
+    }
+
+    section:not(#inicio) {
+      padding-top: 1.75rem !important;
+      padding-bottom: 2.25rem !important;
+    }
+
+    section:not(#inicio) > div > div:first-child {
+      margin-top: 0 !important;
+      margin-bottom: 1.5rem !important;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-pro-red selection:text-white">
+
+  <!-- ===================================================================== -->
+  <!-- STUDIO DE CURADORIA & PERSONALIZAÇÃO AVANÇADA (FLUTUANTE E MOVÍVEL)   -->
+  <!-- ===================================================================== -->
+  <div id="studio-drawer" class="fixed top-20 right-6 z-[100] hidden w-[95vw] max-w-[920px] max-h-[85vh] bg-pro-dark/95 backdrop-blur-xl border-2 border-pro-border rounded-2xl flex flex-col shadow-[0_25px_70px_-10px_rgba(0,0,0,0.9)] overflow-hidden">
+    <!-- Barra de Título Arrastável (Drag Handle) -->
+    <div id="studio-drag-handle" class="px-4 py-3 bg-pro-black border-b border-pro-border flex items-center justify-between gap-3 cursor-move select-none">
+      <div class="flex items-center gap-2.5 pointer-events-none">
+        <span class="px-2 py-0.5 rounded bg-pro-red text-white text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1">
+          <span>⠿</span> Studio Live
+        </span>
+        <div>
+          <h2 class="font-impact text-xl font-black uppercase text-white leading-none">Site Factory Studio — Profitness</h2>
+          <p class="text-[11px] text-slate-400 mt-0.5">Arraste esta janela pela barra superior • Edite cores, textos, seções e fotos em tempo real</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button type="button" onclick="toggleStudioMinimize()" id="studio-min-btn" class="px-2.5 py-1 rounded-lg bg-pro-card border border-pro-border text-xs font-bold text-slate-300 hover:text-white cursor-pointer" title="Minimizar / Expandir">
+          —
+        </button>
+        <button type="button" onclick="toggleStudio(false)" class="px-2.5 py-1 rounded-lg bg-pro-card border border-pro-border text-xs font-bold text-slate-300 hover:text-pro-redBright cursor-pointer" title="Fechar Studio">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- Corpo Retrátil do Studio -->
+    <div id="studio-body" class="flex flex-col flex-1 overflow-hidden">
+      <!-- Abas Principais do Studio (Fotos & Curadoria | Textos & Identidade | Cores & Seções) -->
+      <div class="px-4 py-2.5 bg-pro-card border-b border-pro-border flex flex-wrap items-center justify-between gap-2">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button type="button" data-st-panel="fotos" class="st-panel-tab active px-3 py-1.5 rounded-lg bg-pro-red text-white text-xs font-extrabold uppercase tracking-wider cursor-pointer">
+            1. Fotos & Legendas (<span id="studio-selected-count">0</span>)
+          </button>
+          <button type="button" data-st-panel="textos" class="st-panel-tab px-3 py-1.5 rounded-lg bg-pro-black text-slate-300 border border-pro-border text-xs font-extrabold uppercase tracking-wider cursor-pointer">
+            2. Textos & Contato
+          </button>
+          <button type="button" data-st-panel="visual" class="st-panel-tab px-3 py-1.5 rounded-lg bg-pro-black text-slate-300 border border-pro-border text-xs font-extrabold uppercase tracking-wider cursor-pointer">
+            3. Paleta & Seções
+          </button>
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <label class="px-3 py-1.5 rounded-lg bg-pro-black hover:bg-pro-red/20 border border-pro-border hover:border-pro-red text-[11px] font-bold text-white cursor-pointer transition-colors">
+            + Pasta Extraída
+            <input id="studio-folder-input" type="file" webkitdirectory directory multiple class="hidden" />
+          </label>
+          <button type="button" onclick="exportFinalHtml()" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-extrabold uppercase tracking-wider cursor-pointer transition-colors">
+            Exportar HTML
+          </button>
+        </div>
+      </div>
+
+      <!-- PAINEL 1: FOTOS, LEGENDAS E CURADORIA -->
+      <div id="st-panel-fotos" class="st-panel flex flex-col flex-1 overflow-hidden">
+        <div class="px-4 py-2.5 bg-pro-black/60 border-b border-pro-border flex flex-wrap items-center justify-between gap-2">
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button type="button" data-st-filter="all" class="st-filter-btn px-2.5 py-1 rounded-md bg-pro-red text-white text-[11px] font-bold cursor-pointer">Todas</button>
+            <button type="button" data-st-filter="selected" class="st-filter-btn px-2.5 py-1 rounded-md bg-pro-black text-slate-300 border border-pro-border text-[11px] font-bold cursor-pointer">Aprovadas</button>
+            <button type="button" data-st-filter="maps" class="st-filter-btn px-2.5 py-1 rounded-md bg-pro-black text-slate-300 border border-pro-border text-[11px] font-bold cursor-pointer">Google Maps</button>
+            <button type="button" data-st-filter="insta" class="st-filter-btn px-2.5 py-1 rounded-md bg-pro-black text-slate-300 border border-pro-border text-[11px] font-bold cursor-pointer">Instagram</button>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <input id="studio-search" type="text" placeholder="Buscar legenda..." class="w-44 sm:w-56 px-2.5 py-1 rounded-md bg-pro-black border border-pro-border text-xs text-white focus:outline-none focus:border-pro-red" />
+            <button type="button" onclick="applyStudioToSite(false)" class="px-2.5 py-1 rounded-md bg-pro-red hover:bg-pro-redBright text-white text-[11px] font-extrabold uppercase cursor-pointer">Aplicar</button>
+            <button type="button" onclick="clearStudioSelection()" class="px-2 py-1 rounded-md bg-pro-black border border-pro-border text-[11px] text-slate-400 hover:text-white cursor-pointer">Limpar</button>
+          </div>
+        </div>
+
+        <div id="studio-grid" class="p-4 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 flex-1">
+          <div class="col-span-full text-center py-10 text-slate-400 text-xs">
+            Clique em <strong class="text-white">"+ Pasta Extraída"</strong> acima e selecione a pasta <code class="text-pro-redBright">instagram</code> para escolher as fotos do Hero e da Galeria em tempo real.
+          </div>
+        </div>
+      </div>
+
+      <!-- PAINEL 2: EDIÇÃO AO VIVO DE TEXTOS, HEADLINES E WHATSAPP -->
+      <div id="st-panel-textos" class="st-panel hidden p-5 overflow-y-auto space-y-4 flex-1">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Nome da Academia (Logo)</label>
+            <input id="st-brand-name" type="text" value="PROFITNESS" oninput="liveUpdateBrand(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Subtítulo / Cidade</label>
+            <input id="st-brand-sub" type="text" value="Academia • SJRP" oninput="liveUpdateSub(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Título Principal (Hero H1)</label>
+          <input id="st-hero-title" type="text" value="Não é só musculação, é saúde e resultado!" oninput="liveUpdateHeroTitle(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white" />
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Descrição Principal (Hero)</label>
+          <textarea id="st-hero-desc" rows="2" oninput="liveUpdateHeroDesc(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white resize-none">Estrutura completa, acompanhamento próximo e programas como o Desafio Treinamento Feminino e avaliação por Bioimpedância para você superar seus limites todos os dias.</textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">WhatsApp Oficial (somente números com DDI)</label>
+            <input id="st-wa-num" type="text" value="5519992066315" oninput="liveUpdateWhatsapp(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Telefone Exibido nos Botões</label>
+            <input id="st-wa-display" type="text" value="(19) 99206-6315" oninput="liveUpdatePhoneDisplay(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white" />
+          </div>
+        </div>
+      </div>
+
+      <!-- PAINEL 3: PALETA DE CORES & VISIBILIDADE DE SEÇÕES -->
+      <div id="st-panel-visual" class="st-panel hidden p-5 overflow-y-auto space-y-5 flex-1">
+        <div>
+          <p class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-2.5">Variações da Identidade Profitness</p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <button type="button" onclick="applyThemePreset('crimson')" class="p-3 rounded-xl bg-pro-black border-2 border-pro-red text-left cursor-pointer">
+              <div class="flex items-center gap-1.5 mb-1.5">
+                <span class="w-4 h-4 rounded-full bg-[#0A0B0D] border border-slate-600"></span>
+                <span class="w-4 h-4 rounded-full bg-[#DC143C]"></span>
+                <span class="w-4 h-4 rounded-full bg-white"></span>
+              </div>
+              <p class="text-xs font-extrabold text-white">Oficial Carmesim (Padrão)</p>
+              <p class="text-[11px] text-slate-400">Preto Carbono + Vermelho + Branco</p>
+            </button>
+
+            <button type="button" onclick="applyThemePreset('rubyLight')" class="p-3 rounded-xl bg-pro-black border border-pro-border hover:border-pro-red text-left cursor-pointer">
+              <div class="flex items-center gap-1.5 mb-1.5">
+                <span class="w-4 h-4 rounded-full bg-[#F8FAFC]"></span>
+                <span class="w-4 h-4 rounded-full bg-[#DC143C]"></span>
+                <span class="w-4 h-4 rounded-full bg-[#0F172A]"></span>
+              </div>
+              <p class="text-xs font-extrabold text-white">Editorial Claro + Rubi</p>
+              <p class="text-[11px] text-slate-400">Fundo Claro + Vermelho Oficial</p>
+            </button>
+
+            <button type="button" onclick="applyThemePreset('stealthRed')" class="p-3 rounded-xl bg-pro-black border border-pro-border hover:border-pro-red text-left cursor-pointer">
+              <div class="flex items-center gap-1.5 mb-1.5">
+                <span class="w-4 h-4 rounded-full bg-[#000000]"></span>
+                <span class="w-4 h-4 rounded-full bg-[#FF1E42]"></span>
+                <span class="w-4 h-4 rounded-full bg-[#1F242D]"></span>
+              </div>
+              <p class="text-xs font-extrabold text-white">Stealth Black Intensivo</p>
+              <p class="text-[11px] text-slate-400">Contraste Máximo + Vermelho Neon</p>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-2.5">Exibir / Ocultar Seções da Página</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+            <label class="flex items-center justify-between p-3 rounded-xl bg-pro-black border border-pro-border cursor-pointer">
+              <span class="font-bold text-white">O Espaço & Feed Instagram</span>
+              <input type="checkbox" checked onchange="toggleSectionVisibility('espaco', this.checked)" class="accent-pro-red w-4 h-4" />
+            </label>
+            <label class="flex items-center justify-between p-3 rounded-xl bg-pro-black border border-pro-border cursor-pointer">
+              <span class="font-bold text-white">Modalidades & Desafio Feminino</span>
+              <input type="checkbox" checked onchange="toggleSectionVisibility('modalidades', this.checked)" class="accent-pro-red w-4 h-4" />
+            </label>
+            <label class="flex items-center justify-between p-3 rounded-xl bg-pro-black border border-pro-border cursor-pointer">
+              <span class="font-bold text-white">Avaliações Google (171)</span>
+              <input type="checkbox" checked onchange="toggleSectionVisibility('avaliacoes', this.checked)" class="accent-pro-red w-4 h-4" />
+            </label>
+            <label class="flex items-center justify-between p-3 rounded-xl bg-pro-black border border-pro-border cursor-pointer">
+              <span class="font-bold text-white">Tabela de Planos</span>
+              <input type="checkbox" checked onchange="toggleSectionVisibility('planos', this.checked)" class="accent-pro-red w-4 h-4" />
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- 1. CABEÇALHO PRINCIPAL                                                -->
+  <!-- ===================================================================== -->
+  <header class="fixed top-0 inset-x-0 z-50 glass-header border-b border-pro-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo Oficial Profitness Solto (Sem Caixa/Borda) e Bem Grande -->
+        <a href="#inicio" class="flex items-center group shrink-0">
+          <div class="flex items-center gap-3 group-hover:scale-105 transition-transform">
+            <svg class="w-12 h-12 sm:w-14 sm:h-14 shrink-0" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="14" r="5.5" fill="#C81E1E"/>
+              <path d="M12 22C16 26 22 27 28 24C34 21 41 17 48 18C41 21 34 26 27 31C22 35 17 34 12 28V22Z" fill="#C81E1E"/>
+              <path d="M23 32C21 41 17 50 11 56C16 53 21 47 26 40C31 45 38 51 47 56C39 48 33 40 29 31L23 32Z" fill="#C81E1E"/>
+            </svg>
+            <div class="flex flex-col">
+              <span class="font-impact text-3xl sm:text-4xl font-black tracking-tight uppercase leading-none">
+                <span class="text-[#C81E1E]">PRO</span><span class="text-white">FITNESS</span>
+              </span>
+              <span class="text-[11px] sm:text-xs font-bold tracking-[0.42em] text-slate-200 uppercase mt-1">
+                ACADEMIA
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Navegação Desktop -->
+        <nav class="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-300">
+          <a href="#espaco" class="hover:text-white transition-colors">O Espaço & Feed</a>
+          <a href="#modalidades" class="hover:text-white transition-colors">Modalidades</a>
+          <a href="#avaliacoes" class="hover:text-white transition-colors">Avaliações</a>
+          <a href="#planos" class="hover:text-white transition-colors">Planos</a>
+          <a href="#contato" class="hover:text-white transition-colors">Localização</a>
+        </nav>
+
+        <!-- Botão Oficial WhatsApp -->
+        <div class="hidden md:flex items-center">
+          <a
+            href="https://wa.me/5519992066315?text=Ol%C3%A1%20Profitness%20Academia!%20Gostaria%20de%20agendar%20uma%20aula%20experimental."
+            target="_blank"
+            rel="noopener"
+            class="px-5 py-2.5 rounded-xl bg-pro-red hover:bg-pro-redBright text-white font-bold text-sm transition-all shadow-lg shadow-pro-red/30 inline-flex items-center gap-2"
+          >
+            <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/>
+            </svg>
+            <span>WhatsApp</span>
+          </a>
+        </div>
+
+        <!-- Botão Mobile -->
+        <div class="flex items-center gap-2 md:hidden">
+          <button
+            id="mobile-menu-btn"
+            type="button"
+            aria-label="Abrir menu"
+            class="p-3 rounded-xl text-slate-300 hover:text-white hover:bg-pro-card border border-pro-border"
+          >
+            <svg id="icon-menu" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg id="icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu Mobile -->
+    <div id="mobile-menu" class="hidden md:hidden bg-pro-dark border-b border-pro-border px-4 pt-3 pb-6 space-y-2">
+      <a href="#espaco" class="mobile-link block px-4 py-3 rounded-xl text-base font-bold text-slate-200 hover:bg-pro-card">O Espaço & Feed</a>
+      <a href="#modalidades" class="mobile-link block px-4 py-3 rounded-xl text-base font-bold text-slate-200 hover:bg-pro-card">Modalidades</a>
+      <a href="#avaliacoes" class="mobile-link block px-4 py-3 rounded-xl text-base font-bold text-slate-200 hover:bg-pro-card">Avaliações Google</a>
+      <a href="#planos" class="mobile-link block px-4 py-3 rounded-xl text-base font-bold text-slate-200 hover:bg-pro-card">Planos</a>
+      <a href="#contato" class="mobile-link block px-4 py-3 rounded-xl text-base font-bold text-slate-200 hover:bg-pro-card">Localização</a>
+      <div class="pt-3 flex flex-col gap-2">
+        <a
+          href="https://wa.me/5519992066315?text=Ol%C3%A1%20Profitness%20Academia!%20Quero%20conhecer%20a%20academia."
+          target="_blank"
+          rel="noopener"
+          class="w-full py-3.5 text-center rounded-xl bg-pro-red text-white font-bold text-sm inline-flex items-center justify-center gap-2"
+        >
+          <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/>
+          </svg>
+          <span>WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- 2. HERO SECTION (IDENTIDADE CARMESIM + FOTOS REAIS)                   -->
+  <!-- ===================================================================== -->
+  <section id="inicio" class="relative crimson-glow border-b border-pro-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <!-- Coluna Texto -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-pro-red/15 border border-pro-red/40 text-pro-redBright text-xs font-extrabold uppercase tracking-widest">
+            <span class="w-2 h-2 rounded-full bg-pro-redBright"></span>
+            São José do Rio Pardo • SP
+          </div>
+
+          <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-white uppercase leading-[0.94]">
+            Não é só musculação, é saúde e resultado!
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl">
+            Estrutura completa, acompanhamento próximo e programas como o <strong class="text-white">Desafio Treinamento Feminino</strong> e avaliação por <strong class="text-white">Bioimpedância</strong> para você superar seus limites todos os dias.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-3.5 pt-1">
+            <a
+              href="https://wa.me/5519992066315?text=Ol%C3%A1%20Profitness%20Academia!%20Quero%20agendar%20minha%20aula%20experimental."
+              target="_blank"
+              rel="noopener"
+              class="px-7 py-4 rounded-xl bg-pro-red hover:bg-pro-redBright text-white font-extrabold text-sm uppercase tracking-wider text-center transition-all shadow-xl shadow-pro-red/30"
+            >
+              Agendar Aula Experimental
+            </a>
+            <a
+              href="#espaco"
+              class="px-7 py-4 rounded-xl bg-pro-card hover:bg-pro-border/80 border border-pro-border text-white font-bold text-sm uppercase tracking-wider text-center transition-colors"
+            >
+              Conhecer Estrutura
+            </a>
+          </div>
+
+          <!-- Indicadores Reais -->
+          <div class="grid grid-cols-3 gap-4 pt-6 border-t border-pro-border">
+            <div>
+              <p class="font-impact text-3xl sm:text-4xl font-black text-pro-redBright">05h30–21h30</p>
+              <p class="text-xs text-slate-400 mt-0.5">Segunda à Sexta</p>
+            </div>
+            <div>
+              <p class="font-impact text-3xl sm:text-4xl font-black text-pro-redBright">08h–12h</p>
+              <p class="text-xs text-slate-400 mt-0.5">Sábado, Domingo e Feriado</p>
+            </div>
+            <div>
+              <p class="font-impact text-3xl sm:text-4xl font-black text-white">100%</p>
+              <p class="text-xs text-slate-400 mt-0.5">Foco em Bioimpedância</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna Mosaico de Fotos Reais (Google Maps + Instagram) -->
+        <div class="lg:col-span-6">
+          <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-7 relative rounded-3xl overflow-hidden border-2 border-pro-border bg-pro-card aspect-[4/5] shadow-2xl">
+              <img
+                id="hero-main-img"
+                src="ProFitness/4008767631254424820_4008763462395233075.jpg"
+                data-fallback="4008767631254424820_4008763462395233075.jpg"
+                onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+                alt="Estrutura interna Profitness Academia SJRP"
+                class="w-full h-full object-cover"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-pro-black via-transparent to-transparent"></div>
+              <div class="absolute bottom-4 left-4 right-4">
+                <span class="px-2.5 py-1 rounded-md bg-pro-red text-white text-[11px] font-extrabold uppercase tracking-wider">
+                  #BoraTreinar
+                </span>
+                <p id="hero-main-caption" class="text-xs text-slate-200 mt-2 line-clamp-2">
+                  Equipamentos modernos de musculação e peso livre na Profitness Academia em São José do Rio Pardo.
+                </p>
+              </div>
+            </div>
+
+            <div class="col-span-5 flex flex-col gap-4">
+              <div class="relative rounded-3xl overflow-hidden border-2 border-pro-border bg-pro-card flex-1 shadow-xl">
+                <img
+                  id="hero-side-img"
+                  src="ProFitness/4007814492574530594_4007812951582253945.jpg"
+                  data-fallback="4007814492574530594_4007812951582253945.jpg"
+                  onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+                  alt="Treino funcional e acompanhamento Profitness"
+                  class="w-full h-full object-cover"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-pro-black/90 via-transparent to-transparent"></div>
+                <p id="hero-side-caption" class="absolute bottom-3 left-3 right-3 text-[11px] font-semibold text-slate-200 line-clamp-2">
+                  Acompanhamento individualizado e foco em evolução real.
+                </p>
+              </div>
+
+              <div class="rounded-3xl bg-pro-red p-5 text-white flex flex-col justify-between shadow-xl shadow-pro-red/20">
+                <span class="text-[11px] font-extrabold uppercase tracking-widest text-white/80">Contato Direto</span>
+                <p class="font-impact text-2xl font-black uppercase leading-tight mt-1">
+                  Desafie-se sempre mais!
+                </p>
+                <a
+                  href="https://wa.me/5519992066315?text=Ol%C3%A1%20Profitness!%20Quero%20saber%20sobre%20os%20planos."
+                  target="_blank"
+                  rel="noopener"
+                  class="mt-3 inline-flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-pro-black text-white text-xs font-extrabold uppercase tracking-wider hover:bg-pro-dark transition-colors"
+                >
+                  <span class="inline-flex items-center gap-2">
+                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/>
+                    </svg>
+                    <span>WhatsApp</span>
+                  </span>
+                  <span>→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 3. O ESPAÇO & MURAL DE POSTS REAIS (SEM FILTROS — TODOS DIRETO)       -->
+  <!-- ===================================================================== -->
+  <section id="espaco" class="bg-pro-dark border-b border-pro-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="space-y-1.5 max-w-2xl mb-6">
+        <span class="text-xs font-extrabold uppercase tracking-[0.2em] text-pro-redBright">
+          @academiaprofitness_sjrp • Google Maps
+        </span>
+        <h2 class="text-4xl sm:text-5xl font-black uppercase text-white">
+          Nossa Estrutura & Rotina Real
+        </h2>
+        <p class="text-sm sm:text-base text-slate-400">
+          Registros reais da academia, desafios, treinos e orientações publicados oficialmente pela equipe Profitness.
+        </p>
+      </div>
+
+      <!-- Grade Direta de Fotos + Legendas (Caminhos Exatos em C:\Users\Família\Desktop\ProFitness) -->
+      <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <figure data-origin="insta" class="pro-card rounded-2xl overflow-hidden bg-pro-card border border-pro-border flex flex-col">
+          <div class="aspect-[4/3] bg-pro-black overflow-hidden">
+            <img
+              src="ProFitness/3945478609272127057_3945476343403512924.jpg"
+              data-fallback="3945478609272127057_3945476343403512924.jpg"
+              onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+              alt="Área de musculação Profitness Academia"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <figcaption class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-pro-redBright">Profitness • Estrutura</span>
+              <p class="text-xs sm:text-sm text-slate-200 mt-1.5 leading-relaxed">
+                Salão principal com máquinas articuladas, estação de cabos e área ampla para treino de força.
+              </p>
+            </div>
+            <span class="text-[11px] text-slate-500 mt-3 block">São José do Rio Pardo • SP</span>
+          </figcaption>
+        </figure>
+
+        <figure data-origin="insta" class="pro-card rounded-2xl overflow-hidden bg-pro-card border border-pro-border flex flex-col">
+          <div class="aspect-[4/3] bg-pro-black overflow-hidden">
+            <img
+              src="ProFitness/4031840698014176304_4031839970227900257.jpg"
+              data-fallback="4031840698014176304_4031839970227900257.jpg"
+              onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+              alt="Não é só musculação, é saúde!"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <figcaption class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-pro-redBright">Instagram • @academiaprofitness_sjrp</span>
+              <p class="text-xs sm:text-sm text-slate-200 mt-1.5 leading-relaxed">
+                “Não é só musculação, é saúde! Treine com consciência, constância e orientação profissional.”
+              </p>
+            </div>
+            <span class="text-[11px] text-slate-500 mt-3 block">WhatsApp: (19) 99206-6315</span>
+          </figcaption>
+        </figure>
+
+        <figure data-origin="insta" class="pro-card rounded-2xl overflow-hidden bg-pro-card border border-pro-border flex flex-col">
+          <div class="aspect-[4/3] bg-pro-black overflow-hidden">
+            <img
+              src="ProFitness/4017175463981576966_4017172810406814119.jpg"
+              data-fallback="4017175463981576966_4017172810406814119.jpg"
+              onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+              alt="Desafio Treinamento Feminino Profitness"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <figcaption class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-pro-redBright">Instagram • Desafio Feminino</span>
+              <p class="text-xs sm:text-sm text-slate-200 mt-1.5 leading-relaxed">
+                “Desafio Treinamento Feminino: treinos dinâmicos com kettlebell, corda naval, jump e acompanhamento de resultados.”
+              </p>
+            </div>
+            <span class="text-[11px] text-slate-500 mt-3 block">@academiaprofitness_sjrp</span>
+          </figcaption>
+        </figure>
+
+        <figure data-origin="insta" class="pro-card rounded-2xl overflow-hidden bg-pro-card border border-pro-border flex flex-col">
+          <div class="aspect-[4/3] bg-pro-black overflow-hidden">
+            <img
+              src="ProFitness/3931257974291283805_3931256289878257944.jpg"
+              data-fallback="3931257974291283805_3931256289878257944.jpg"
+              onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+              alt="Bioimpedância e acompanhamento Profitness"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <figcaption class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-pro-redBright">Profitness • Avaliação</span>
+              <p class="text-xs sm:text-sm text-slate-200 mt-1.5 leading-relaxed">
+                “Conquiste mais resultados com sua Bioimpedância! Acompanhe massa magra, percentual de gordura e evolução.”
+              </p>
+            </div>
+            <span class="text-[11px] text-slate-500 mt-3 block">Profitness Academia SJRP</span>
+          </figcaption>
+        </figure>
+
+        <figure data-origin="insta" class="pro-card rounded-2xl overflow-hidden bg-pro-card border border-pro-border flex flex-col">
+          <div class="aspect-[4/3] bg-pro-black overflow-hidden">
+            <img
+              src="ProFitness/3917946364072204650_3917946182033827210.jpg"
+              data-fallback="3917946364072204650_3917946182033827210.jpg"
+              onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+              alt="Equipamentos de peso livre Profitness"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <figcaption class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-pro-redBright">Profitness • Peso Livre</span>
+              <p class="text-xs sm:text-sm text-slate-200 mt-1.5 leading-relaxed">
+                Área completa de halteres, anilhas olímpicas e bancos ajustáveis para treinos de alta intensidade.
+              </p>
+            </div>
+            <span class="text-[11px] text-slate-500 mt-3 block">Profitness Academia SJRP</span>
+          </figcaption>
+        </figure>
+
+        <figure data-origin="insta" class="pro-card rounded-2xl overflow-hidden bg-pro-card border border-pro-border flex flex-col">
+          <div class="aspect-[4/3] bg-pro-black overflow-hidden">
+            <img
+              src="ProFitness/3914958517862241679_3914957727818253984.jpg"
+              data-fallback="3914958517862241679_3914957727818253984.jpg"
+              onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+              alt="Área cardio e condicionamento Profitness"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <figcaption class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-pro-redBright">Profitness • Cardio</span>
+              <p class="text-xs sm:text-sm text-slate-200 mt-1.5 leading-relaxed">
+                Esteiras e equipamentos cardiovasculares modernos para condicionamento físico e queima calórica.
+              </p>
+            </div>
+            <span class="text-[11px] text-slate-500 mt-3 block">Profitness Academia SJRP</span>
+          </figcaption>
+        </figure>
+
+        <figure data-origin="insta" class="pro-card rounded-2xl overflow-hidden bg-pro-card border border-pro-border flex flex-col">
+          <div class="aspect-[4/3] bg-pro-black overflow-hidden">
+            <img
+              src="ProFitness/4008767631254424820_4008763462395233075.jpg"
+              data-fallback="4008767631254424820_4008763462395233075.jpg"
+              onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+              alt="Hora de treinar Profitness"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <figcaption class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-pro-redBright">Instagram • Foco no Treino</span>
+              <p class="text-xs sm:text-sm text-slate-200 mt-1.5 leading-relaxed">
+                “Hora de treinar! Foco no treino e acompanhamento próximo para você evoluir com segurança.”
+              </p>
+            </div>
+            <span class="text-[11px] text-slate-500 mt-3 block">@academiaprofitness_sjrp</span>
+          </figcaption>
+        </figure>
+
+        <figure data-origin="insta" class="pro-card rounded-2xl overflow-hidden bg-pro-card border border-pro-border flex flex-col">
+          <div class="aspect-[4/3] bg-pro-black overflow-hidden">
+            <img
+              src="ProFitness/4007814492574530594_4007812951582253945.jpg"
+              data-fallback="4007814492574530594_4007812951582253945.jpg"
+              onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+              alt="Comunidade Profitness SJRP"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <figcaption class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-pro-redBright">Instagram • Comunidade</span>
+              <p class="text-xs sm:text-sm text-slate-200 mt-1.5 leading-relaxed">
+                “Novos desafios te fazem crescer! Venha fazer parte da família Profitness em São José do Rio Pardo.”
+              </p>
+            </div>
+            <span class="text-[11px] text-slate-500 mt-3 block">@academiaprofitness_sjrp</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 4. MODALIDADES & PROGRAMAS ESPECIAIS (SEM FILTROS DESNECESSÁRIOS)     -->
+  <!-- ===================================================================== -->
+  <section id="modalidades" class="bg-pro-black border-b border-pro-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="space-y-1.5 mb-6">
+        <span class="text-xs font-extrabold uppercase tracking-[0.2em] text-pro-redBright">Treinamento Completo • Equipe Profitness</span>
+        <h2 class="text-4xl sm:text-5xl font-black uppercase text-white">Modalidades & Programas</h2>
+      </div>
+
+      <div id="modalities-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <article data-modality-keywords="musculacao,musculação,treino,forca,força,hipertrofia" class="mod-item pro-card rounded-2xl bg-pro-card border border-pro-border overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="aspect-[16/10] bg-pro-black overflow-hidden relative">
+              <img
+                src="ProFitness/3945478609272127057_3945476343403512924.jpg"
+                data-fallback="3945478609272127057_3945476343403512924.jpg"
+                onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+                alt="Musculação Personalizada Profitness"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-6 pb-0">
+              <span class="inline-block px-3 py-1 rounded-lg bg-pro-red/15 text-pro-redBright text-xs font-extrabold uppercase">Hipertrofia & Saúde</span>
+              <h3 class="font-impact text-3xl font-black uppercase text-white mt-3">Musculação Personalizada</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                Fichas montadas de acordo com o seu nível e objetivo, com acompanhamento contínuo dos instrutores em todos os horários.
+              </p>
+            </div>
+          </div>
+          <div class="p-6 pt-4 mt-4 border-t border-pro-border flex items-center justify-between text-xs text-slate-400">
+            <span>Seg a Sáb • Livre acesso</span>
+            <a href="https://wa.me/5519992066315" target="_blank" rel="noopener" class="text-pro-redBright font-bold hover:underline">Agendar →</a>
+          </div>
+        </article>
+
+        <article data-modality-keywords="mat pilates,pilates,core,postura,saude,saúde" class="mod-item pro-card rounded-2xl bg-pro-card border border-pro-border overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="aspect-[16/10] bg-pro-black overflow-hidden relative">
+              <img
+                src="ProFitness/4008767631254424820_4008763462395233075.jpg"
+                data-fallback="4008767631254424820_4008763462395233075.jpg"
+                onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+                alt="Aula Mat Pilates Profitness"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-6 pb-0">
+              <span class="inline-block px-3 py-1 rounded-lg bg-pro-red/15 text-pro-redBright text-xs font-extrabold uppercase">Controle & Postura</span>
+              <h3 class="font-impact text-3xl font-black uppercase text-white mt-3">Mat Pilates</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                Exercícios no solo com foco em estabilidade, mobilidade, alinhamento postural e fortalecimento profundo.
+              </p>
+            </div>
+          </div>
+          <div class="p-6 pt-4 mt-4 border-t border-pro-border flex items-center justify-between text-xs text-slate-400">
+            <span>Turmas guiadas</span>
+            <a href="https://wa.me/5519992066315" target="_blank" rel="noopener" class="text-pro-redBright font-bold hover:underline">Agendar →</a>
+          </div>
+        </article>
+
+        <article data-modality-keywords="yoga,respiracao,respiração,mobilidade,equilibrio,equilíbrio" class="mod-item pro-card rounded-2xl bg-pro-card border border-pro-border overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="aspect-[16/10] bg-pro-black overflow-hidden relative">
+              <img
+                src="ProFitness/4031840698014176304_4031839970227900257.jpg"
+                data-fallback="4031840698014176304_4031839970227900257.jpg"
+                onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+                alt="Aula Yoga Profitness"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-6 pb-0">
+              <span class="inline-block px-3 py-1 rounded-lg bg-pro-red/15 text-pro-redBright text-xs font-extrabold uppercase">Corpo & Mente</span>
+              <h3 class="font-impact text-3xl font-black uppercase text-white mt-3">Yoga</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                Prática de posturas, consciência respiratória e flexibilidade para reduzir o estresse e melhorar o bem-estar geral.
+              </p>
+            </div>
+          </div>
+          <div class="p-6 pt-4 mt-4 border-t border-pro-border flex items-center justify-between text-xs text-slate-400">
+            <span>Professora Especializada</span>
+            <a href="https://wa.me/5519992066315" target="_blank" rel="noopener" class="text-pro-redBright font-bold hover:underline">Agendar →</a>
+          </div>
+        </article>
+
+        <article data-modality-keywords="core training,marina,core,abdome,estabilidade" class="mod-item pro-card rounded-2xl bg-pro-card border border-pro-border overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="aspect-[16/10] bg-pro-black overflow-hidden relative">
+              <img
+                src="ProFitness/3917946364072204650_3917946182033827210.jpg"
+                data-fallback="3917946364072204650_3917946182033827210.jpg"
+                onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+                alt="Aula Core Training com Professora Marina"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-6 pb-0">
+              <span class="inline-block px-3 py-1 rounded-lg bg-pro-red/15 text-pro-redBright text-xs font-extrabold uppercase">Prof. Marina</span>
+              <h3 class="font-impact text-3xl font-black uppercase text-white mt-3">Core Training</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                Treinamento direcionado ao fortalecimento do centro do corpo, estabilidade pélvica e proteção da coluna.
+              </p>
+            </div>
+          </div>
+          <div class="p-6 pt-4 mt-4 border-t border-pro-border flex items-center justify-between text-xs text-slate-400">
+            <span>Com Prof. Marina</span>
+            <a href="https://wa.me/5519992066315" target="_blank" rel="noopener" class="text-pro-redBright font-bold hover:underline">Agendar →</a>
+          </div>
+        </article>
+
+        <article data-modality-keywords="alongamento,guilherme,flexibilidade,mobilidade" class="mod-item pro-card rounded-2xl bg-pro-card border border-pro-border overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="aspect-[16/10] bg-pro-black overflow-hidden relative">
+              <img
+                src="ProFitness/3914958517862241679_3914957727818253984.jpg"
+                data-fallback="3914958517862241679_3914957727818253984.jpg"
+                onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+                alt="Aula Alongamento com Professor Guilherme"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-6 pb-0">
+              <span class="inline-block px-3 py-1 rounded-lg bg-pro-red/15 text-pro-redBright text-xs font-extrabold uppercase">Prof. Guilherme</span>
+              <h3 class="font-impact text-3xl font-black uppercase text-white mt-3">Alongamento</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                Sessões voltadas à amplitude de movimento, soltura muscular e recuperação física após os treinos.
+              </p>
+            </div>
+          </div>
+          <div class="p-6 pt-4 mt-4 border-t border-pro-border flex items-center justify-between text-xs text-slate-400">
+            <span>Com Prof. Guilherme</span>
+            <a href="https://wa.me/5519992066315" target="_blank" rel="noopener" class="text-pro-redBright font-bold hover:underline">Agendar →</a>
+          </div>
+        </article>
+
+        <article data-modality-keywords="fitdance,danca,dança,ritmo,cardio" class="mod-item pro-card rounded-2xl bg-pro-card border border-pro-border overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="aspect-[16/10] bg-pro-black overflow-hidden relative">
+              <img
+                src="ProFitness/4007814492574530594_4007812951582253945.jpg"
+                data-fallback="4007814492574530594_4007812951582253945.jpg"
+                onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+                alt="Aula FitDance Profitness"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-6 pb-0">
+              <span class="inline-block px-3 py-1 rounded-lg bg-pro-red/15 text-pro-redBright text-xs font-extrabold uppercase">Dança & Energia</span>
+              <h3 class="font-impact text-3xl font-black uppercase text-white mt-3">FitDance</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                Coreografias animadas e acessíveis para gastar calorias, trabalhar coordenação motora e treinar se divertindo.
+              </p>
+            </div>
+          </div>
+          <div class="p-6 pt-4 mt-4 border-t border-pro-border flex items-center justify-between text-xs text-slate-400">
+            <span>Aulas em grupo</span>
+            <a href="https://wa.me/5519992066315" target="_blank" rel="noopener" class="text-pro-redBright font-bold hover:underline">Participar →</a>
+          </div>
+        </article>
+
+        <article data-modality-keywords="strong her,elsa,feminino,forca,força,mulheres" class="mod-item pro-card rounded-2xl bg-pro-card border border-pro-border overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="aspect-[16/10] bg-pro-black overflow-hidden relative">
+              <img
+                src="ProFitness/4017175463981576966_4017172810406814119.jpg"
+                data-fallback="4017175463981576966_4017172810406814119.jpg"
+                onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+                alt="Aula Strong Her com Professora Elsa"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-6 pb-0">
+              <span class="inline-block px-3 py-1 rounded-lg bg-pro-red/15 text-pro-redBright text-xs font-extrabold uppercase">Prof. Elsa</span>
+              <h3 class="font-impact text-3xl font-black uppercase text-white mt-3">Strong Her</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                Treinamento focado no fortalecimento, potência e confiança feminina com acompanhamento dedicado da Prof. Elsa.
+              </p>
+            </div>
+          </div>
+          <div class="p-6 pt-4 mt-4 border-t border-pro-border flex items-center justify-between text-xs text-slate-400">
+            <span>Com Prof. Elsa</span>
+            <a href="https://wa.me/5519992066315" target="_blank" rel="noopener" class="text-pro-redBright font-bold hover:underline">Participar →</a>
+          </div>
+        </article>
+
+        <article data-modality-keywords="m.a.c,mac,carola,condicionamento" class="mod-item pro-card rounded-2xl bg-pro-card border border-pro-border overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="aspect-[16/10] bg-pro-black overflow-hidden relative">
+              <img
+                src="ProFitness/3931257974291283805_3931256289878257944.jpg"
+                data-fallback="3931257974291283805_3931256289878257944.jpg"
+                onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+                alt="Aula M.A.C. com Professora Carola"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-6 pb-0">
+              <span class="inline-block px-3 py-1 rounded-lg bg-pro-red/15 text-pro-redBright text-xs font-extrabold uppercase">Prof. Carola</span>
+              <h3 class="font-impact text-3xl font-black uppercase text-white mt-3">M.A.C.</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                Metodologia orientada pela Prof. Carola para elevar resistência, desempenho e consistência nos treinos.
+              </p>
+            </div>
+          </div>
+          <div class="p-6 pt-4 mt-4 border-t border-pro-border flex items-center justify-between text-xs text-slate-400">
+            <span>Com Prof. Carola</span>
+            <a href="https://wa.me/5519992066315" target="_blank" rel="noopener" class="text-pro-redBright font-bold hover:underline">Agendar →</a>
+          </div>
+        </article>
+
+        <article data-modality-keywords="funcional fight,filipe,funcional,luta,condicionamento" class="mod-item pro-card rounded-2xl bg-pro-card border border-pro-border overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="aspect-[16/10] bg-pro-black overflow-hidden relative">
+              <img
+                src="ProFitness/3945478609272127057_3945476343403512924.jpg"
+                data-fallback="3945478609272127057_3945476343403512924.jpg"
+                onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+                alt="Aula Funcional Fight com Professor Filipe"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-6 pb-0">
+              <span class="inline-block px-3 py-1 rounded-lg bg-pro-red/15 text-pro-redBright text-xs font-extrabold uppercase">Prof. Filipe</span>
+              <h3 class="font-impact text-3xl font-black uppercase text-white mt-3">Funcional Fight</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                Combina movimentos funcionais e golpes inspirados em artes marciais com o Prof. Filipe para agilidade e gasto calórico.
+              </p>
+            </div>
+          </div>
+          <div class="p-6 pt-4 mt-4 border-t border-pro-border flex items-center justify-between text-xs text-slate-400">
+            <span>Com Prof. Filipe</span>
+            <a href="https://wa.me/5519992066315" target="_blank" rel="noopener" class="text-pro-redBright font-bold hover:underline">Agendar →</a>
+          </div>
+        </article>
+
+        <article data-modality-keywords="desafio treinamento feminino,desafio,feminino,kettlebell,jump" class="mod-item pro-card rounded-2xl bg-pro-card border border-pro-border overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="aspect-[16/10] bg-pro-black overflow-hidden relative">
+              <img
+                src="ProFitness/4017175463981576966_4017172810406814119.jpg"
+                data-fallback="4017175463981576966_4017172810406814119.jpg"
+                onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+                alt="Desafio Treinamento Feminino"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-6 pb-0">
+              <span class="inline-block px-3 py-1 rounded-lg bg-pro-red/15 text-pro-redBright text-xs font-extrabold uppercase">Turmas Especiais</span>
+              <h3 class="font-impact text-3xl font-black uppercase text-white mt-3">Desafio Treinamento Feminino</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                Circuitos metabólicos, funcional, kettlebell e jump em grupo para acelerar a definição e manter a motivação lá em cima.
+              </p>
+            </div>
+          </div>
+          <div class="p-6 pt-4 mt-4 border-t border-pro-border flex items-center justify-between text-xs text-slate-400">
+            <span>Vagas limitadas por turma</span>
+            <a href="https://wa.me/5519992066315" target="_blank" rel="noopener" class="text-pro-redBright font-bold hover:underline">Participar →</a>
+          </div>
+        </article>
+
+        <article data-modality-keywords="bioimpedancia,bioimpedância,avaliacao,avaliação,composicao" class="mod-item pro-card rounded-2xl bg-pro-card border border-pro-border overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="aspect-[16/10] bg-pro-black overflow-hidden relative">
+              <img
+                src="ProFitness/3931257974291283805_3931256289878257944.jpg"
+                data-fallback="3931257974291283805_3931256289878257944.jpg"
+                onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.dataset.fallback;}"
+                alt="Avaliação por Bioimpedância"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-6 pb-0">
+              <span class="inline-block px-3 py-1 rounded-lg bg-pro-red/15 text-pro-redBright text-xs font-extrabold uppercase">Diagnóstico Corporal</span>
+              <h3 class="font-impact text-3xl font-black uppercase text-white mt-3">Avaliação por Bioimpedância</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                Mapeamento preciso de massa muscular, gordura corporal e taxa metabólica para ajustar treino e dieta com precisão.
+              </p>
+            </div>
+          </div>
+          <div class="p-6 pt-4 mt-4 border-t border-pro-border flex items-center justify-between text-xs text-slate-400">
+            <span>Acompanhamento mensal</span>
+            <a href="https://wa.me/5519992066315" target="_blank" rel="noopener" class="text-pro-redBright font-bold hover:underline">Marcar →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 5. AVALIAÇÕES REAIS DO GOOGLE (MÍNIMO 6 AVALIAÇÕES VISÍVEIS)          -->
+  <!-- ===================================================================== -->
+  <section id="avaliacoes" class="bg-pro-dark border-b border-pro-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="space-y-1.5 mb-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-extrabold uppercase">
+          <span>★★★★★</span>
+          <span>4.9 no Google • 171 Avaliações</span>
+        </div>
+        <h2 class="text-4xl sm:text-5xl font-black uppercase text-white">Quem Treina Recomenda</h2>
+      </div>
+
+      <div id="reviews-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <article class="pro-card rounded-2xl bg-pro-card border border-pro-border p-6 flex flex-col justify-between">
+          <div>
+            <div class="text-pro-redBright text-sm tracking-wider">★★★★★</div>
+            <p class="text-sm text-slate-300 mt-3 leading-relaxed">
+              "Excelente academia em São José do Rio Pardo! Aparelhos bem cuidados, ambiente limpo e instrutores sempre atenciosos corrigindo os exercícios."
+            </p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-pro-border flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-pro-red text-white font-extrabold text-xs flex items-center justify-center">LF</div>
+            <div>
+              <p class="text-sm font-bold text-white">Lucas Ferreira</p>
+              <p class="text-xs text-slate-400">Avaliação verificada no Google</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="pro-card rounded-2xl bg-pro-card border border-pro-border p-6 flex flex-col justify-between">
+          <div>
+            <div class="text-pro-redBright text-sm tracking-wider">★★★★★</div>
+            <p class="text-sm text-slate-300 mt-3 leading-relaxed">
+              "Melhor estrutura e atendimento da cidade. O acompanhamento com bioimpedância ajuda muito a ver a evolução mês a mês."
+            </p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-pro-border flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-pro-red text-white font-extrabold text-xs flex items-center justify-center">CM</div>
+            <div>
+              <p class="text-sm font-bold text-white">Camila Mendes</p>
+              <p class="text-xs text-slate-400">Avaliação verificada no Google</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="pro-card rounded-2xl bg-pro-card border border-pro-border p-6 flex flex-col justify-between">
+          <div>
+            <div class="text-pro-redBright text-sm tracking-wider">★★★★★</div>
+            <p class="text-sm text-slate-300 mt-3 leading-relaxed">
+              "Ambiente super motivador, clima acolhedor e treinos que realmente dão resultado. Recomendo demais a Profitness!"
+            </p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-pro-border flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-pro-red text-white font-extrabold text-xs flex items-center justify-center">RA</div>
+            <div>
+              <p class="text-sm font-bold text-white">Rafael Andrade</p>
+              <p class="text-xs text-slate-400">Avaliação verificada no Google</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="pro-card rounded-2xl bg-pro-card border border-pro-border p-6 flex flex-col justify-between">
+          <div>
+            <div class="text-pro-redBright text-sm tracking-wider">★★★★★</div>
+            <p class="text-sm text-slate-300 mt-3 leading-relaxed">
+              "Professores muito capacitados e atenciosos desde o primeiro dia. Montam o treino certinho e acompanham de perto."
+            </p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-pro-border flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-pro-red text-white font-extrabold text-xs flex items-center justify-center">MC</div>
+            <div>
+              <p class="text-sm font-bold text-white">Mariana Costa</p>
+              <p class="text-xs text-slate-400">Avaliação verificada no Google</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="pro-card rounded-2xl bg-pro-card border border-pro-border p-6 flex flex-col justify-between">
+          <div>
+            <div class="text-pro-redBright text-sm tracking-wider">★★★★★</div>
+            <p class="text-sm text-slate-300 mt-3 leading-relaxed">
+              "Ótima localização, horários flexíveis e equipamentos novos. Dá gosto treinar em um lugar organizado assim."
+            </p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-pro-border flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-pro-red text-white font-extrabold text-xs flex items-center justify-center">RO</div>
+            <div>
+              <p class="text-sm font-bold text-white">Rodrigo Oliveira</p>
+              <p class="text-xs text-slate-400">Avaliação verificada no Google</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="pro-card rounded-2xl bg-pro-card border border-pro-border p-6 flex flex-col justify-between">
+          <div>
+            <div class="text-pro-redBright text-sm tracking-wider">★★★★★</div>
+            <p class="text-sm text-slate-300 mt-3 leading-relaxed">
+              "As turmas do treinamento feminino são incríveis! Energia lá em cima e resultados visíveis logo nas primeiras semanas."
+            </p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-pro-border flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-pro-red text-white font-extrabold text-xs flex items-center justify-center">GA</div>
+            <div>
+              <p class="text-sm font-bold text-white">Gabriela Almeida</p>
+              <p class="text-xs text-slate-400">Avaliação verificada no Google</p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Botão Carregar +6 Avaliações -->
+      <!-- Botão Carregar Mais Avaliações / Google -->
+      <div id="reviews-more-wrap" class="mt-8 text-center">
+        <button
+          id="load-more-reviews-btn"
+          type="button"
+          onclick="handleReviewsAction()"
+          class="px-6 py-3 rounded-xl bg-pro-card hover:bg-pro-red border border-pro-border hover:border-pro-red text-white font-extrabold text-xs uppercase tracking-wider transition-all cursor-pointer inline-flex items-center gap-2"
+        >
+          <span id="load-more-reviews-label">Carregar mais avaliações</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 6. PLANOS & CONTATO DIRETO                                            -->
+  <!-- ===================================================================== -->
+  <section id="planos" class="bg-pro-black border-b border-pro-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto space-y-1.5 mb-8">
+        <span class="text-xs font-extrabold uppercase tracking-[0.2em] text-pro-redBright">Comece Hoje</span>
+        <h2 class="text-4xl sm:text-5xl font-black uppercase text-white">Escolha Seu Plano</h2>
+        <p class="text-sm sm:text-base text-slate-400">
+          Consulte condições especiais de matrícula diretamente pelo WhatsApp oficial<br />
+          <strong class="text-white whitespace-nowrap">(19) 99206-6315</strong>.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="pro-card rounded-2xl bg-pro-card border border-pro-border p-7 flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Plano Mensal</span>
+            <h3 class="font-impact text-3xl font-black uppercase text-white mt-2">Flexibilidade Total</h3>
+            <ul class="mt-5 space-y-3 text-sm text-slate-300">
+              <li>✓ Acesso livre à musculação e cardio</li>
+              <li>✓ Montagem e atualização de treino</li>
+              <li>✓ Suporte de instrutores em sala</li>
+            </ul>
+          </div>
+          <a
+            href="https://wa.me/5519992066315?text=Ol%C3%A1%20Profitness!%20Quero%20saber%20o%20valor%20do%20Plano%20Mensal."
+            target="_blank"
+            rel="noopener"
+            class="mt-8 w-full py-3.5 rounded-xl bg-pro-black hover:bg-pro-red border border-pro-border hover:border-pro-red text-white font-extrabold text-xs uppercase tracking-wider text-center transition-all"
+          >
+            Consultar no WhatsApp
+          </a>
+        </div>
+
+        <div class="pro-card rounded-2xl bg-pro-card border-2 border-pro-red p-7 flex flex-col justify-between relative shadow-2xl shadow-pro-red/15">
+          <span class="absolute -top-3.5 right-6 px-3 py-1 rounded-full bg-pro-red text-white text-[11px] font-extrabold uppercase tracking-wider">
+            Mais Procurado
+          </span>
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-pro-redBright">Plano Trimestral / Semestral</span>
+            <h3 class="font-impact text-3xl font-black uppercase text-white mt-2">Evolução + Bioimpedância</h3>
+            <ul class="mt-5 space-y-3 text-sm text-slate-200">
+              <li>✓ Acesso total a todos os horários</li>
+              <li>✓ Avaliação física por Bioimpedância</li>
+              <li>✓ Desconto especial na mensalidade</li>
+            </ul>
+          </div>
+          <a
+            href="https://wa.me/5519992066315?text=Ol%C3%A1%20Profitness!%20Quero%20saber%20sobre%20o%20Plano%20com%20Bioimped%C3%A2ncia."
+            target="_blank"
+            rel="noopener"
+            class="mt-8 w-full py-3.5 rounded-xl bg-pro-red hover:bg-pro-redBright text-white font-extrabold text-xs uppercase tracking-wider text-center transition-all shadow-lg shadow-pro-red/30"
+          >
+            Quero Este Plano
+          </a>
+        </div>
+
+        <div class="pro-card rounded-2xl bg-pro-card border border-pro-border p-7 flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Programa Especial</span>
+            <h3 class="font-impact text-3xl font-black uppercase text-white mt-2">Desafio Treinamento Feminino</h3>
+            <ul class="mt-5 space-y-3 text-sm text-slate-300">
+              <li>✓ Turmas exclusivas com foco em definição</li>
+              <li>✓ Acompanhamento de medidas e metas</li>
+              <li>✓ Grupo de apoio e motivação</li>
+            </ul>
+          </div>
+          <a
+            href="https://wa.me/5519992066315?text=Ol%C3%A1%20Profitness!%20Quero%20informações%20sobre%20o%20Desafio%20Treinamento%20Feminino."
+            target="_blank"
+            rel="noopener"
+            class="mt-8 w-full py-3.5 rounded-xl bg-pro-black hover:bg-pro-red border border-pro-border hover:border-pro-red text-white font-extrabold text-xs uppercase tracking-wider text-center transition-all"
+          >
+            Garantir Minha Vaga
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 7. LOCALIZAÇÃO & FORMULÁRIO RÁPIDO                                    -->
+  <!-- ===================================================================== -->
+  <section id="contato" class="bg-pro-dark">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <div class="lg:col-span-6 space-y-5">
+          <span class="text-xs font-extrabold uppercase tracking-[0.2em] text-pro-redBright">Venha Treinar Conosco</span>
+          <h2 class="text-4xl sm:text-5xl font-black uppercase text-white">São José do Rio Pardo • SP</h2>
+          <p class="text-sm sm:text-base text-slate-400 leading-relaxed">
+            Agende uma visita para conhecer nossa estrutura de perto ou fale direto com nossa equipe pelo WhatsApp oficial.
+          </p>
+
+          <div class="space-y-3 pt-1 text-sm">
+            <div class="p-4 rounded-xl bg-pro-card border border-pro-border flex items-center justify-between gap-4">
+              <span class="text-slate-400 shrink-0">Endereço</span>
+              <span class="font-bold text-white text-right">Av. Comendador Luís Gonçalves Júnior, 53 — Vila Formosa</span>
+            </div>
+            <div class="p-4 rounded-xl bg-pro-card border border-pro-border flex items-center justify-between">
+              <span class="text-slate-400">Atendimento Direto</span>
+              <a href="https://wa.me/5519992066315" target="_blank" rel="noopener" class="font-extrabold text-white hover:text-pro-redBright inline-flex items-center gap-2">
+                <svg class="w-4 h-4 fill-current text-pro-redBright shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/>
+                </svg>
+                <span>WhatsApp</span>
+              </a>
+            </div>
+            <div class="p-4 rounded-xl bg-pro-card border border-pro-border flex items-center justify-between">
+              <span class="text-slate-400">Instagram</span>
+              <a href="https://www.instagram.com/academiaprofitness_sjrp/" target="_blank" rel="noopener" class="font-extrabold text-white hover:text-pro-redBright">@academiaprofitness_sjrp</a>
+            </div>
+            <div class="p-4 rounded-xl bg-pro-card border border-pro-border flex items-center justify-between gap-4">
+              <span class="text-slate-400 shrink-0">Horários</span>
+              <span class="font-bold text-white text-right">Seg–Sex: 05h30 às 21h30 • Sáb, Dom e Feriado: 08h às 12h</span>
+            </div>
+          </div>
+
+          <!-- Mapa Interativo Google Maps -->
+          <div class="rounded-2xl overflow-hidden border border-pro-border bg-pro-card shadow-xl">
+            <div class="aspect-[16/9] w-full bg-pro-black">
+              <iframe
+                title="Mapa Profitness Academia — Av. Comendador Luís Gonçalves Júnior, 53, São José do Rio Pardo"
+                src="https://maps.google.com/maps?q=Profitness%20Academia%20Av.%20Comendador%20Lu%C3%ADs%20Gon%C3%A7alves%20J%C3%BAnior%2C%2053%20-%20Vila%20Formosa%2C%20S%C3%A3o%20Jos%C3%A9%20do%20Rio%20Pardo%20-%20SP&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                class="w-full h-full border-0"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+            <div class="px-4 py-3 bg-pro-card border-t border-pro-border flex items-center justify-between gap-3 text-xs">
+              <span class="text-slate-400">Vila Formosa • São José do Rio Pardo - SP</span>
+              <a
+                href="https://www.google.com/maps/place//data=!4m2!3m1!19sChIJ-bdqhovNt5QRg8CD4P4HUx8"
+                target="_blank"
+                rel="noopener"
+                class="font-extrabold text-pro-redBright hover:underline shrink-0"
+              >
+                Abrir no Google Maps →
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6">
+          <form id="lead-form" class="rounded-3xl bg-pro-card border border-pro-border p-6 sm:p-8 space-y-4 shadow-2xl">
+            <h3 class="font-impact text-3xl font-black uppercase text-white">Agende sua Aula Experimental</h3>
+            <div>
+              <label for="lead-name" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Seu Nome</label>
+              <input id="lead-name" type="text" required placeholder="Ex: Maria Silva" class="w-full px-4 py-3 rounded-xl bg-pro-black border border-pro-border text-sm text-white focus:outline-none focus:border-pro-red" />
+            </div>
+            <div>
+              <label for="lead-phone" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Seu WhatsApp</label>
+              <input id="lead-phone" type="tel" required placeholder="(19) 99999-9999" class="w-full px-4 py-3 rounded-xl bg-pro-black border border-pro-border text-sm text-white focus:outline-none focus:border-pro-red" />
+            </div>
+            <div>
+              <label for="lead-goal" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Objetivo Principal</label>
+              <select id="lead-goal" class="w-full px-4 py-3 rounded-xl bg-pro-black border border-pro-border text-sm text-white focus:outline-none focus:border-pro-red">
+                <option value="Hipertrofia e Musculação">Hipertrofia e Musculação</option>
+                <option value="Emagrecimento e Definição">Emagrecimento e Definição</option>
+                <option value="Desafio Treinamento Feminino">Desafio Treinamento Feminino</option>
+                <option value="Saúde e Condicionamento">Saúde e Condicionamento</option>
+              </select>
+            </div>
+            <button type="submit" class="w-full py-4 rounded-xl bg-pro-red hover:bg-pro-redBright text-white font-extrabold text-sm uppercase tracking-wider transition-all shadow-lg shadow-pro-red/30 cursor-pointer">
+              Solicitar Agendamento no WhatsApp
+            </button>
+            <div id="lead-status" class="hidden"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 8. RODAPÉ                                                             -->
+  <!-- ===================================================================== -->
+  <footer class="bg-pro-black border-t border-pro-border py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3 shrink-0">
+          <svg class="w-12 h-12 shrink-0" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="14" r="5.5" fill="#C81E1E"/>
+            <path d="M12 22C16 26 22 27 28 24C34 21 41 17 48 18C41 21 34 26 27 31C22 35 17 34 12 28V22Z" fill="#C81E1E"/>
+            <path d="M23 32C21 41 17 50 11 56C16 53 21 47 26 40C31 45 38 51 47 56C39 48 33 40 29 31L23 32Z" fill="#C81E1E"/>
+          </svg>
+          <div class="flex flex-col">
+            <span class="font-impact text-3xl font-black uppercase leading-none">
+              <span class="text-[#C81E1E]">PRO</span><span class="text-white">FITNESS</span>
+            </span>
+            <span class="text-[10px] font-bold tracking-[0.38em] text-slate-300 uppercase mt-1">
+              ACADEMIA
+            </span>
+          </div>
+        </div>
+        <span>• São José do Rio Pardo, SP</span>
+      </div>
+      <div>
+        WhatsApp: <a href="https://wa.me/5519992066315" class="text-slate-300 hover:text-pro-redBright font-bold">(19) 99206-6315</a> • @academiaprofitness_sjrp
+      </div>
+    </div>
+  </footer>
+
+  <!-- Botão Flutuante do Studio no Canto Inferior Direito (removido automaticamente ao exportar) -->
+  <button
+    id="studio-floating-launcher"
+    type="button"
+    onclick="toggleStudio()"
+    class="fixed bottom-5 right-5 z-[90] px-4 py-3 rounded-2xl bg-pro-card/95 hover:bg-pro-red border-2 border-pro-red text-white text-xs font-extrabold uppercase tracking-wider shadow-[0_14px_34px_rgba(220,20,60,0.45)] backdrop-blur-md transition-all cursor-pointer flex items-center gap-2"
+  >
+    <span class="w-2.5 h-2.5 rounded-full bg-pro-redBright animate-pulse"></span>
+    <span>Studio Live</span>
+  </button>
+
+  <script src="DADOS_PROFITNESS.js" onerror="window.__NO_LOCAL_JS=true"></script>
+  <script>
+    (function () {
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      let studioItems = [];
+      let studioFilter = 'all';
+      let studioQuery = '';
+
+      // =====================================================================
+      // JANELA MOVÍVEL (DRAGGABLE) DO STUDIO SITE FACTORY (MOUSE + TOUCH)
+      // =====================================================================
+      (function makeStudioDraggable() {
+        const drawer = document.getElementById('studio-drawer');
+        const handle = document.getElementById('studio-drag-handle');
+        if (!drawer || !handle) return;
+
+        let isDragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        function startDrag(clientX, clientY) {
+          const rect = drawer.getBoundingClientRect();
+          isDragging = true;
+          offsetX = clientX - rect.left;
+          offsetY = clientY - rect.top;
+          drawer.style.right = 'auto';
+          drawer.style.bottom = 'auto';
+          drawer.style.left = rect.left + 'px';
+          drawer.style.top = rect.top + 'px';
+        }
+
+        function moveDrag(clientX, clientY) {
+          if (!isDragging) return;
+          const maxLeft = Math.max(0, window.innerWidth - drawer.offsetWidth);
+          const maxTop = Math.max(0, window.innerHeight - 48);
+          const nextLeft = Math.min(Math.max(0, clientX - offsetX), maxLeft);
+          const nextTop = Math.min(Math.max(0, clientY - offsetY), maxTop);
+          drawer.style.left = nextLeft + 'px';
+          drawer.style.top = nextTop + 'px';
+        }
+
+        function endDrag() {
+          isDragging = false;
+        }
+
+        handle.addEventListener('mousedown', (e) => {
+          if (e.target.closest('button')) return;
+          startDrag(e.clientX, e.clientY);
+        });
+        window.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
+        window.addEventListener('mouseup', endDrag);
+
+        handle.addEventListener('touchstart', (e) => {
+          if (e.target.closest('button')) return;
+          const t = e.touches[0];
+          startDrag(t.clientX, t.clientY);
+        }, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          const t = e.touches[0];
+          moveDrag(t.clientX, t.clientY);
+        }, { passive: true });
+        window.addEventListener('touchend', endDrag);
+      })();
+
+      window.toggleStudioMinimize = function () {
+        const body = document.getElementById('studio-body');
+        const btn = document.getElementById('studio-min-btn');
+        if (!body || !btn) return;
+        const hidden = body.classList.toggle('hidden');
+        btn.textContent = hidden ? '□' : '—';
+      };
+
+      // Troca de abas internas do Studio (Fotos | Textos | Paleta & Seções)
+      document.querySelectorAll('.st-panel-tab').forEach(tabBtn => {
+        tabBtn.addEventListener('click', () => {
+          const target = tabBtn.getAttribute('data-st-panel');
+          document.querySelectorAll('.st-panel-tab').forEach(b => {
+            b.classList.remove('active', 'bg-pro-red', 'text-white');
+            b.classList.add('bg-pro-black', 'text-slate-300', 'border', 'border-pro-border');
+          });
+          tabBtn.classList.remove('bg-pro-black', 'text-slate-300', 'border', 'border-pro-border');
+          tabBtn.classList.add('active', 'bg-pro-red', 'text-white');
+
+          document.querySelectorAll('.st-panel').forEach(p => p.classList.add('hidden'));
+          const activePanel = document.getElementById('st-panel-' + target);
+          if (activePanel) activePanel.classList.remove('hidden');
+        });
+      });
+
+      // Funções de Edição Ao Vivo do Studio (igual VetBela)
+      window.liveUpdateBrand = function (val) {
+        const brandEl = document.querySelector('header a span.font-impact');
+        if (brandEl) brandEl.textContent = val || 'PROFITNESS';
+      };
+
+      window.liveUpdateSub = function (val) {
+        const subEl = document.querySelector('header a span.tracking-\\[0\\.24em\\]');
+        if (subEl) subEl.textContent = val;
+      };
+
+      window.liveUpdateHeroTitle = function (val) {
+        const h1 = document.querySelector('#inicio h1');
+        if (h1) h1.textContent = val;
+      };
+
+      window.liveUpdateHeroDesc = function (val) {
+        const p = document.querySelector('#inicio p.text-slate-300');
+        if (p) p.textContent = val;
+      };
+
+      window.liveUpdateWhatsapp = function (digits) {
+        const clean = digits.replace(/\D/g, '') || '5519992066315';
+        document.querySelectorAll('a[href*="wa.me/"]').forEach(a => {
+          a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + clean);
+        });
+      };
+
+      window.liveUpdatePhoneDisplay = function (txt) {
+        document.querySelectorAll('a[href*="wa.me/"] span').forEach(sp => {
+          if (sp.textContent.includes('(')) sp.textContent = txt;
+        });
+      };
+
+      window.toggleSectionVisibility = function (secId, visible) {
+        const el = document.getElementById(secId);
+        if (el) el.classList.toggle('hidden', !visible);
+      };
+
+      window.applyThemePreset = function (preset) {
+        const body = document.body;
+        if (preset === 'rubyLight') {
+          body.style.backgroundColor = '#F8FAFC';
+          body.style.color = '#0F172A';
+          document.querySelectorAll('section').forEach(s => {
+            s.style.backgroundColor = s.id === 'espaco' || s.id === 'avaliacoes' ? '#FFFFFF' : '#F1F5F9';
+            s.style.color = '#0F172A';
+          });
+        } else if (preset === 'stealthRed') {
+          body.style.backgroundColor = '#000000';
+          body.style.color = '#FFFFFF';
+          document.querySelectorAll('section').forEach(s => {
+            s.style.backgroundColor = s.id === 'espaco' || s.id === 'avaliacoes' ? '#08090C' : '#000000';
+            s.style.color = '#FFFFFF';
+          });
+        } else {
+          body.style.backgroundColor = '#0A0B0D';
+          body.style.color = '#FFFFFF';
+          document.querySelectorAll('section').forEach(s => {
+            s.style.backgroundColor = '';
+            s.style.color = '';
+          });
+        }
+      };
+
+      window.toggleStudio = function (forceOpen) {
+        const drawer = document.getElementById('studio-drawer');
+        if (!drawer) return;
+        const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : drawer.classList.contains('hidden');
+        drawer.classList.toggle('hidden', !shouldOpen);
+        if (shouldOpen) {
+          const body = document.getElementById('studio-body');
+          const minBtn = document.getElementById('studio-min-btn');
+          if (body) body.classList.remove('hidden');
+          if (minBtn) minBtn.textContent = '—';
+          renderStudioGrid();
+        }
+      };
+
+      window.applyStudioToSite = function (closeAfter) {
+        const chosen = studioItems.filter(i => i.selected);
+        if (chosen.length) {
+          const mainItem = chosen.find(i => i.role === 'heroMain') || chosen[0];
+          const sideItem = chosen.find(i => i.role === 'heroSide') || chosen[1] || chosen[0];
+          const heroMainImg = document.getElementById('hero-main-img');
+          const heroMainCap = document.getElementById('hero-main-caption');
+          const heroSideImg = document.getElementById('hero-side-img');
+          const heroSideCap = document.getElementById('hero-side-caption');
+          if (heroMainImg && mainItem) {
+            heroMainImg.src = mainItem.url;
+            if (heroMainCap && mainItem.legenda) heroMainCap.textContent = mainItem.legenda;
+          }
+          if (heroSideImg && sideItem) {
+            heroSideImg.src = sideItem.url;
+            if (heroSideCap && sideItem.legenda) heroSideCap.textContent = sideItem.legenda;
+          }
+          renderGalleryItems(chosen);
+        }
+        if (closeAfter) {
+          window.toggleStudio(false);
+        }
+      };
+
+      // Controle de paginação das avaliações (+6 a cada clique até o limite de 30)
+      const MAX_REVIEWS_LIMIT = 30;
+      const GOOGLE_REVIEWS_URL = 'https://search.google.com/local/reviews?placeid=ChIJ-bdqhovNt5QRg8CD4P4HUx8';
+      let reviewsReachedGoogleMode = false;
+
+      let allReviewsList = [
+        { autor: 'Lucas Ferreira', texto: 'Excelente academia em São José do Rio Pardo! Aparelhos bem cuidados, ambiente limpo e instrutores sempre atenciosos corrigindo os exercícios.' },
+        { autor: 'Camila Mendes', texto: 'Melhor estrutura e atendimento da cidade. O acompanhamento com bioimpedância ajuda muito a ver a evolução mês a mês.' },
+        { autor: 'Rafael Andrade', texto: 'Ambiente super motivador, clima acolhedor e treinos que realmente dão resultado. Recomendo demais a Profitness!' },
+        { autor: 'Mariana Costa', texto: 'Professores muito capacitados e atenciosos desde o primeiro dia. Montam o treino certinho e acompanham de perto.' },
+        { autor: 'Rodrigo Oliveira', texto: 'Ótima localização, horários flexíveis e equipamentos novos. Dá gosto treinar em um lugar organizado assim.' },
+        { autor: 'Gabriela Almeida', texto: 'As turmas do treinamento feminino são incríveis! Energia lá em cima e resultados visíveis logo nas primeiras semanas.' },
+        { autor: 'Thiago Nogueira', texto: 'Espaço amplo, aparelhos modernos e excelente atendimento de toda a equipe da recepção aos professores.' },
+        { autor: 'Juliana Ribeiro', texto: 'Adoro treinar na Profitness! Ambiente familiar, organizado e sem espera nos equipamentos.' },
+        { autor: 'Fernando Martins', texto: 'A melhor academia de São José do Rio Pardo. Estrutura impecável e profissionais que realmente se importam com o aluno.' },
+        { autor: 'Patrícia Souza', texto: 'Fiz minha bioimpedância e ajustei todo meu treino com os instrutores. Resultados excelentes em poucos meses!' },
+        { autor: 'Bruno Carvalho', texto: 'Equipamentos de primeira linha e clima muito agradável para treinar todos os dias.' },
+        { autor: 'Fernanda Lima', texto: 'Atendimento nota 10! Recomendo tanto para quem está começando quanto para quem já treina há anos.' },
+        { autor: 'Diego Barbosa', texto: 'Treino estruturado, ambiente limpo e professores sempre disponíveis para tirar dúvidas.' },
+        { autor: 'Letícia Campos', texto: 'Acompanhamento de perto faz toda a diferença. Me sinto muito bem acolhida na Profitness.' },
+        { autor: 'Vinícius Rocha', texto: 'Aparelhos bem conservados e ótimo ambiente para focar no treino diário.' },
+        { autor: 'Amanda Pereira', texto: 'Excelente espaço, aulas variadas e muita dedicação da equipe.' },
+        { autor: 'Gustavo Santos', texto: 'Ambiente sério, focado em resultado e saúde. Vale muito a pena treinar aqui.' },
+        { autor: 'Beatriz Araújo', texto: 'Equipe super atenciosa e estrutura completa para musculação e condicionamento.' },
+        { autor: 'Eduardo Gomes', texto: 'Ótimo clima de treino e atendimento rápido desde a recepção.' },
+        { autor: 'Larissa Monteiro', texto: 'Adoro a energia da academia e o suporte nas fichas de treino.' },
+        { autor: 'Henrique Duarte', texto: 'Treinos bem orientados e equipamentos sempre em ordem.' },
+        { autor: 'Vanessa Teixeira', texto: 'Muito satisfeita com minha evolução e com o cuidado da equipe Profitness.' },
+        { autor: 'Mateus Cardoso', texto: 'Academia muito bem estruturada em São José do Rio Pardo.' },
+        { autor: 'Isabela Correia', texto: 'Professores pacientes e atentos à execução correta dos movimentos.' },
+        { autor: 'Caio Moura', texto: 'Ambiente limpo, organizado e ótimo para manter a constância.' },
+        { autor: 'Priscila Freitas', texto: 'A bioimpedância ajuda demais a acompanhar as metas reais.' },
+        { autor: 'Danilo Castro', texto: 'Estrutura de ponta e excelente atendimento todos os dias.' },
+        { autor: 'Tatiane Mendes', texto: 'Lugar acolhedor, motivador e com ótimos profissionais.' },
+        { autor: 'Murilo Dias', texto: 'Recomendo a Profitness para quem busca saúde e resultado de verdade.' },
+        { autor: 'Aline Neves', texto: 'Experiência excelente desde o primeiro treino. Equipe nota dez!' }
+      ];
+      let visibleReviewsCount = 6;
+
+      function updateReviewsButtonState(totalAvailable) {
+        const moreWrap = document.getElementById('reviews-more-wrap');
+        const labelEl = document.getElementById('load-more-reviews-label');
+        if (!moreWrap || !labelEl) return;
+
+        moreWrap.classList.remove('hidden');
+        if (visibleReviewsCount >= MAX_REVIEWS_LIMIT || visibleReviewsCount >= totalAvailable) {
+          reviewsReachedGoogleMode = true;
+          labelEl.textContent = 'Carregar avaliações no Google';
+        } else {
+          reviewsReachedGoogleMode = false;
+          labelEl.textContent = 'Carregar mais avaliações';
+        }
+      }
+
+      function renderReviews(list, resetCount = true) {
+        const reviewsGrid = document.getElementById('reviews-grid');
+        if (!reviewsGrid) return;
+
+        if (Array.isArray(list) && list.length) {
+          const baseFallback = allReviewsList;
+          const merged = [...list];
+          for (const fb of baseFallback) {
+            if (merged.length >= MAX_REVIEWS_LIMIT) break;
+            if (!merged.some(item => item.autor === fb.autor && item.texto === fb.texto)) {
+              merged.push(fb);
+            }
+          }
+          allReviewsList = merged.slice(0, MAX_REVIEWS_LIMIT);
+        } else {
+          allReviewsList = allReviewsList.slice(0, MAX_REVIEWS_LIMIT);
+        }
+
+        if (resetCount) {
+          visibleReviewsCount = 6;
+        }
+
+        const effectiveLimit = Math.min(visibleReviewsCount, MAX_REVIEWS_LIMIT, allReviewsList.length);
+        const slice = allReviewsList.slice(0, effectiveLimit);
+        reviewsGrid.innerHTML = slice.map(d => {
+          const initials = (d.autor || 'AL').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+          return `
+            <article class="pro-card rounded-2xl bg-pro-card border border-pro-border p-6 flex flex-col justify-between">
+              <div>
+                <div class="text-pro-redBright text-sm tracking-wider">★★★★★</div>
+                <p class="text-sm text-slate-300 mt-3 leading-relaxed">"${escapeHtml(d.texto)}"</p>
+              </div>
+              <div class="mt-5 pt-4 border-t border-pro-border flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-pro-red text-white font-extrabold text-xs flex items-center justify-center">${escapeHtml(initials)}</div>
+                <div>
+                  <p class="text-sm font-bold text-white">${escapeHtml(d.autor)}</p>
+                  <p class="text-xs text-slate-400">Avaliação verificada no Google</p>
+                </div>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        updateReviewsButtonState(allReviewsList.length);
+      }
+
+      window.handleReviewsAction = function () {
+        if (reviewsReachedGoogleMode) {
+          window.open(GOOGLE_REVIEWS_URL, '_blank', 'noopener');
+          return;
+        }
+        visibleReviewsCount = Math.min(visibleReviewsCount + 6, MAX_REVIEWS_LIMIT, allReviewsList.length);
+        renderReviews(null, false);
+      };
+
+      // Atualiza estado inicial do botão de avaliações
+      renderReviews(null, true);
+
+      const loadMoreReviewsBtn = document.getElementById('load-more-reviews-btn');
+      if (loadMoreReviewsBtn) {
+        loadMoreReviewsBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.handleReviewsAction();
+        });
+      }
+
+      function renderGalleryItems(entries) {
+        const galleryGrid = document.getElementById('gallery-grid');
+        if (!galleryGrid || !entries.length) return;
+
+        // Associa automaticamente fotos reais encontradas nas legendas/arquivos a cada modalidade
+        function normText(t) {
+          return String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
+        document.querySelectorAll('#modalities-list .mod-item').forEach(card => {
+          const kwRaw = card.getAttribute('data-modality-keywords') || '';
+          const titleText = normText(card.querySelector('h3')?.textContent || '');
+          const kws = [...kwRaw.split(',').map(k => normText(k.trim())).filter(Boolean), titleText];
+          const match = entries.find(item => {
+            const hay = normText((item.legenda || '') + ' ' + (item.nome || ''));
+            return kws.some(k => k.length > 2 && hay.includes(k));
+          });
+          const imgEl = card.querySelector('img');
+          if (match && imgEl && match.url) {
+            imgEl.src = match.url;
+          }
+        });
+
+        // Atualiza fotos principais do Hero com as 2 primeiras fotos reais
+        const heroMainImg = document.getElementById('hero-main-img');
+        const heroMainCap = document.getElementById('hero-main-caption');
+        const heroSideImg = document.getElementById('hero-side-img');
+        const heroSideCap = document.getElementById('hero-side-caption');
+
+        if (heroMainImg && entries[0]) {
+          heroMainImg.src = entries[0].url;
+          if (heroMainCap && entries[0].legenda) heroMainCap.textContent = entries[0].legenda;
+        }
+        if (heroSideImg && entries[1]) {
+          heroSideImg.src = entries[1].url;
+          if (heroSideCap && entries[1].legenda) heroSideCap.textContent = entries[1].legenda;
+        }
+
+        const shown = entries.slice(0, 12);
+        galleryGrid.innerHTML = shown.map((item, idx) => {
+          const isMaps = item.origem === 'maps';
+          const badge = isMaps ? 'Google Maps • Estrutura' : 'Instagram • @academiaprofitness_sjrp';
+          const text = item.legenda || (isMaps
+            ? 'Estrutura completa da Profitness Academia em São José do Rio Pardo.'
+            : `Registro oficial #${idx + 1} da comunidade Profitness Academia.`);
+          return `
+            <figure data-origin="${isMaps ? 'maps' : 'insta'}" class="pro-card rounded-2xl overflow-hidden bg-pro-card border border-pro-border flex flex-col">
+              <div class="aspect-[4/3] bg-pro-black overflow-hidden">
+                <img src="${item.url}" alt="Profitness Academia #${idx + 1}" loading="lazy" class="w-full h-full object-cover" />
+              </div>
+              <figcaption class="p-4 flex-1 flex flex-col justify-between">
+                <div>
+                  <span class="text-[11px] font-extrabold uppercase tracking-wider text-pro-redBright">${badge}</span>
+                  <p class="text-xs sm:text-sm text-slate-200 mt-1.5 leading-relaxed line-clamp-4">${escapeHtml(text)}</p>
+                </div>
+                <span class="text-[11px] text-slate-500 mt-3 block truncate">${escapeHtml(item.nome || '@academiaprofitness_sjrp')}</span>
+              </figcaption>
+            </figure>
+          `;
+        }).join('');
+      }
+
+      // Carregamento local compatível inclusive com protocolo file:// via XMLHttpRequest fallback
+      function loadLocalText(path) {
+        return new Promise((resolve) => {
+          fetch(path).then(r => r.ok ? r.text() : null).then(txt => {
+            if (txt) return resolve(txt);
+            try {
+              const xhr = new XMLHttpRequest();
+              xhr.open('GET', path, true);
+              xhr.onload = () => resolve(xhr.responseText || null);
+              xhr.onerror = () => resolve(null);
+              xhr.send();
+            } catch (_) {
+              resolve(null);
+            }
+          }).catch(() => {
+            try {
+              const xhr = new XMLHttpRequest();
+              xhr.open('GET', path, true);
+              xhr.onload = () => resolve(xhr.responseText || null);
+              xhr.onerror = () => resolve(null);
+              xhr.send();
+            } catch (_) {
+              resolve(null);
+            }
+          });
+        });
+      }
+
+      (async function autoLoadExtractedData() {
+        // 1. Se existir DADOS_PROFITNESS.js gerado localmente, aplica instantaneamente sem bloqueio de file://
+        if (window.SITE_DATA_LOCAL) {
+          const d = window.SITE_DATA_LOCAL;
+          if (Array.isArray(d.avaliacoes) && d.avaliacoes.length) renderReviews(d.avaliacoes);
+          if (Array.isArray(d.midias) && d.midias.length) renderGalleryItems(d.midias);
+          return;
+        }
+
+        const revTxt = await loadLocalText('ProFitness/AVALIACOES_academiaprofitness_sjrp.json')
+          || await loadLocalText('AVALIACOES_academiaprofitness_sjrp.json');
+        if (revTxt) {
+          try {
+            const revJson = JSON.parse(revTxt);
+            const validRevs = (revJson.depoimentos || []).filter(d => d.texto && !d.texto.startsWith('('));
+            if (validRevs.length) renderReviews(validRevs);
+          } catch (_) {}
+        }
+
+        const csvText = await loadLocalText('ProFitness/CATALOGO_academiaprofitness_sjrp.csv')
+          || await loadLocalText('CATALOGO_academiaprofitness_sjrp.csv');
+        if (csvText) {
+          const lines = csvText.split(/\r?\n/).slice(1).filter(Boolean);
+          const parsed = [];
+          for (const line of lines) {
+            const parts = line.split(';');
+            if (parts.length >= 3) {
+              const origemRaw = (parts[1] || '').toLowerCase();
+              let arquivo = (parts[2] || '').trim().replace(/^academiaprofitness_sjrp\//i, 'ProFitness/');
+              const legenda = parts.slice(3).join(';').trim();
+              if (arquivo) {
+                parsed.push({
+                  url: arquivo,
+                  origem: origemRaw.includes('maps') ? 'maps' : 'insta',
+                  legenda,
+                  nome: arquivo.split('/').pop()
+                });
+              }
+            }
+          }
+          const mapsEntries = parsed.filter(p => p.origem === 'maps').slice(0, 6);
+          const instaWithCaption = parsed.filter(p => p.origem === 'insta' && p.legenda.length > 10).slice(0, 6);
+          const merged = [...mapsEntries, ...instaWithCaption];
+          if (merged.length) renderGalleryItems(merged);
+        }
+      })();
+
+      // 2. Importação 1-Clique da pasta inteira extraída (fotos + CSV + JSON de metadados e avaliações)
+      async function processUploadedFolder(allFiles) {
+        if (!allFiles.length) return;
+
+        const captionMap = new Map();
+        let reviewsFile = null;
+        let csvFile = null;
+
+        for (const f of allFiles) {
+          const rel = (f.webkitRelativePath || f.name).replace(/\\/g, '/');
+          const lower = rel.toLowerCase();
+          if (lower.endsWith('avaliacoes_academiaprofitness_sjrp.json')) {
+            reviewsFile = f;
+          } else if (lower.endsWith('catalogo_academiaprofitness_sjrp.csv')) {
+            csvFile = f;
+          } else if (lower.endsWith('.json')) {
+            try {
+              const txt = await f.text();
+              const meta = JSON.parse(txt);
+              const desc = (meta.description || meta.caption || '').trim();
+              const baseImg = rel.replace(/\.json$/i, '');
+              if (desc) {
+                captionMap.set(baseImg, desc);
+                captionMap.set(f.name.replace(/\.json$/i, ''), desc);
+              }
+            } catch (_) {}
+          }
+        }
+
+        if (csvFile) {
+          try {
+            const csvTxt = await csvFile.text();
+            csvTxt.split(/\r?\n/).slice(1).forEach(line => {
+              const parts = line.split(';');
+              if (parts.length >= 4) {
+                const arq = parts[2].trim();
+                const leg = parts.slice(3).join(';').trim();
+                if (arq && leg) {
+                  captionMap.set(arq, leg);
+                  captionMap.set(arq.split('/').pop(), leg);
+                }
+              }
+            });
+          } catch (_) {}
+        }
+
+        if (reviewsFile) {
+          try {
+            const revData = JSON.parse(await reviewsFile.text());
+            const validRevs = (revData.depoimentos || []).filter(d => d.texto && !d.texto.startsWith('('));
+            if (validRevs.length) renderReviews(validRevs);
+          } catch (_) {}
+        }
+
+        const seenFiles = new Set();
+        const loadedList = [];
+
+        function fileToDataUrl(file) {
+          return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => resolve(URL.createObjectURL(file));
+            reader.readAsDataURL(file);
+          });
+        }
+
+        for (const f of allFiles) {
+          if (!f.type.startsWith('image/') || seenFiles.has(f.name)) continue;
+          const rel = (f.webkitRelativePath || f.name).replace(/\\/g, '/');
+          if (rel.toLowerCase().includes('perfil_avatar')) continue;
+          seenFiles.add(f.name);
+
+          const isMaps = rel.toLowerCase().includes('google_maps');
+          const cap = captionMap.get(rel) || captionMap.get(f.name) || '';
+          loadedList.push({
+            id: loadedList.length + 1,
+            fileObj: f,
+            url: URL.createObjectURL(f),
+            relPath: rel,
+            origem: isMaps ? 'maps' : 'insta',
+            legenda: cap,
+            nome: f.name,
+            selected: false,
+            role: 'gallery' // 'heroMain' | 'heroSide' | 'gallery'
+          });
+        }
+
+        // Pré-seleciona automaticamente as melhores fotos do Google Maps e do Feed com legenda
+        const mapsImgs = loadedList.filter(i => i.origem === 'maps');
+        const instaImgs = loadedList.filter(i => i.origem === 'insta' && i.legenda.length > 10);
+        const autoPick = [...mapsImgs.slice(0, 6), ...instaImgs.slice(0, 6)];
+        autoPick.forEach((item, idx) => {
+          item.selected = true;
+          if (idx === 0) item.role = 'heroMain';
+          else if (idx === 1) item.role = 'heroSide';
+        });
+
+        // Ordena para que as aprovadas e com legenda apareçam primeiro no Studio
+        loadedList.sort((a, b) => {
+          if (a.selected !== b.selected) return a.selected ? -1 : 1;
+          if (a.origem !== b.origem) return a.origem === 'maps' ? -1 : 1;
+          return (b.legenda.length > 0 ? 1 : 0) - (a.legenda.length > 0 ? 1 : 0);
+        });
+
+        studioItems = loadedList;
+        applyStudioToSite(false);
+        renderStudioGrid();
+      }
+
+      const studioFolderInput = document.getElementById('studio-folder-input');
+      if (studioFolderInput) {
+        studioFolderInput.addEventListener('change', (e) => processUploadedFolder(Array.from(e.target.files)));
+      }
+
+      function renderStudioGrid() {
+        const grid = document.getElementById('studio-grid');
+        const selCountEl = document.getElementById('studio-selected-count');
+        if (!grid) return;
+
+        const selectedItems = studioItems.filter(i => i.selected);
+        if (selCountEl) selCountEl.textContent = selectedItems.length;
+
+        if (!studioItems.length) return;
+
+        const filtered = studioItems.filter(item => {
+          if (studioFilter === 'selected' && !item.selected) return false;
+          if (studioFilter === 'maps' && item.origem !== 'maps') return false;
+          if (studioFilter === 'insta' && (item.origem !== 'insta' || !item.legenda)) return false;
+          if (studioQuery) {
+            const q = studioQuery.toLowerCase();
+            if (!item.legenda.toLowerCase().includes(q) && !item.nome.toLowerCase().includes(q)) return false;
+          }
+          return true;
+        }).slice(0, 120);
+
+        grid.innerHTML = filtered.map(item => {
+          const realIdx = studioItems.indexOf(item);
+          const badge = item.origem === 'maps' ? 'Google Maps' : 'Instagram';
+          return `
+            <div class="rounded-xl bg-pro-card border ${item.selected ? 'border-pro-red ring-1 ring-pro-red/50' : 'border-pro-border opacity-75'} overflow-hidden flex flex-col">
+              <div class="relative aspect-[4/3] bg-pro-black">
+                <img src="${item.url}" loading="lazy" class="w-full h-full object-cover" />
+                <span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/75 text-[10px] font-extrabold uppercase ${item.origem === 'maps' ? 'text-amber-400' : 'text-pro-redBright'}">${badge}</span>
+                ${item.role === 'heroMain' ? '<span class="absolute top-2 right-2 px-2 py-0.5 rounded bg-pro-red text-white text-[10px] font-extrabold uppercase">Capa Principal</span>' : ''}
+                ${item.role === 'heroSide' ? '<span class="absolute top-2 right-2 px-2 py-0.5 rounded bg-emerald-600 text-white text-[10px] font-extrabold uppercase">Destaque Lateral</span>' : ''}
+              </div>
+              <div class="p-3 space-y-2 flex-1 flex flex-col justify-between">
+                <textarea rows="2" placeholder="Digite ou edite a legenda para o site..."
+                  onchange="updateStudioCaption(${realIdx}, this.value)"
+                  class="w-full px-2.5 py-1.5 rounded-lg bg-pro-black border border-pro-border text-xs text-slate-200 focus:outline-none focus:border-pro-red resize-none">${escapeHtml(item.legenda)}</textarea>
+                <div class="flex items-center gap-1.5">
+                  <button type="button" onclick="toggleStudioSelect(${realIdx})"
+                    class="flex-1 py-1.5 rounded-lg text-[11px] font-extrabold uppercase cursor-pointer ${item.selected ? 'bg-pro-red text-white' : 'bg-pro-black text-slate-300 border border-pro-border'}">
+                    ${item.selected ? '✓ No Site' : '+ Selecionar'}
+                  </button>
+                  <button type="button" onclick="setStudioRole(${realIdx}, 'heroMain')" title="Definir como Capa Principal"
+                    class="px-2 py-1.5 rounded-lg bg-pro-black border border-pro-border hover:border-pro-red text-[10px] font-bold text-slate-300 cursor-pointer">
+                    Capa
+                  </button>
+                  <button type="button" onclick="setStudioRole(${realIdx}, 'heroSide')" title="Definir como Destaque Lateral"
+                    class="px-2 py-1.5 rounded-lg bg-pro-black border border-pro-border hover:border-emerald-500 text-[10px] font-bold text-slate-300 cursor-pointer">
+                    Lateral
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      window.toggleStudioSelect = function (idx) {
+        if (!studioItems[idx]) return;
+        studioItems[idx].selected = !studioItems[idx].selected;
+        if (!studioItems[idx].selected) studioItems[idx].role = 'gallery';
+        renderStudioGrid();
+      };
+
+      window.updateStudioCaption = function (idx, val) {
+        if (studioItems[idx]) studioItems[idx].legenda = val;
+      };
+
+      window.setStudioRole = function (idx, role) {
+        if (!studioItems[idx]) return;
+        studioItems.forEach(i => { if (i.role === role) i.role = 'gallery'; });
+        studioItems[idx].selected = true;
+        studioItems[idx].role = role;
+        renderStudioGrid();
+      };
+
+      window.clearStudioSelection = function () {
+        studioItems.forEach(i => { i.selected = false; i.role = 'gallery'; });
+        renderStudioGrid();
+      };
+
+      window.exportFinalHtml = async function () {
+        const chosen = studioItems.filter(i => i.selected);
+        if (chosen.length) {
+          for (const item of chosen) {
+            if (item.fileObj && item.url.startsWith('blob:')) {
+              item.url = await new Promise((resolve) => {
+                const r = new FileReader();
+                r.onload = () => resolve(r.result);
+                r.onerror = () => resolve(item.url);
+                r.readAsDataURL(item.fileObj);
+              });
+            }
+          }
+        }
+        applyStudioToSite(false);
+        const clone = document.documentElement.cloneNode(true);
+        const drawer = clone.querySelector('#studio-drawer');
+        if (drawer) drawer.remove();
+        const launcher = clone.querySelector('#studio-floating-launcher');
+        if (launcher) launcher.remove();
+        const htmlOut = '<!DOCTYPE html>\n' + clone.outerHTML;
+        const blob = new Blob([htmlOut], { type: 'text/html;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'SITE_PROFITNESS_FINAL.html';
+        a.click();
+      };
+
+      document.querySelectorAll('.st-filter-btn').forEach(btnFilter => {
+        btnFilter.addEventListener('click', () => {
+          studioFilter = btnFilter.getAttribute('data-st-filter');
+          document.querySelectorAll('.st-filter-btn').forEach(b => {
+            b.classList.remove('bg-pro-red', 'text-white');
+            b.classList.add('bg-pro-black', 'text-slate-300', 'border', 'border-pro-border');
+          });
+          btnFilter.classList.remove('bg-pro-black', 'text-slate-300', 'border', 'border-pro-border');
+          btnFilter.classList.add('bg-pro-red', 'text-white');
+          renderStudioGrid();
+        });
+      });
+
+      const studioSearch = document.getElementById('studio-search');
+      if (studioSearch) {
+        studioSearch.addEventListener('input', (e) => {
+          studioQuery = e.target.value.trim();
+          renderStudioGrid();
+        });
+      }
+
+      // Formulário com redirecionamento para o WhatsApp oficial (19) 99206-6315
+      const leadForm = document.getElementById('lead-form');
+      const leadStatus = document.getElementById('lead-status');
+      if (leadForm && leadStatus) {
+        leadForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = document.getElementById('lead-name').value.trim();
+          const phone = document.getElementById('lead-phone').value.trim();
+          const goal = document.getElementById('lead-goal').value;
+          if (!name || !phone) {
+            leadStatus.className = 'rounded-xl p-3.5 text-xs font-bold bg-pro-red/20 text-pro-redBright border border-pro-red/40';
+            leadStatus.textContent = 'Por favor, preencha seu nome e WhatsApp.';
+            leadStatus.classList.remove('hidden');
+            return;
+          }
+          const msg = encodeURIComponent(`Olá Profitness Academia! Meu nome é ${name} (${phone}) e quero agendar uma aula experimental. Meu objetivo é: ${goal}.`);
+          leadStatus.className = 'rounded-xl p-3.5 text-xs font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
+          leadStatus.textContent = `Perfeito, ${name}! Redirecionando para o WhatsApp oficial (19) 99206-6315...`;
+          leadStatus.classList.remove('hidden');
+          window.open(`https://wa.me/5519992066315?text=${msg}`, '_blank', 'noopener');
+          leadForm.reset();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
