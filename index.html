@@ -2196,7 +2196,8 @@
         if (window.SITE_DATA_LOCAL) {
           const d = window.SITE_DATA_LOCAL;
           if (Array.isArray(d.avaliacoes) && d.avaliacoes.length) renderReviews(d.avaliacoes);
-          if (Array.isArray(d.midias) && d.midias.length) renderGalleryItems(d.midias);
+          // A galeria principal é curada diretamente no HTML. Não a sobrescreva
+          // com a ordem automática do catálogo, que pode associar fotos aleatórias às legendas.
           return;
         }
 
@@ -2300,7 +2301,8 @@
             }
           });
 
-          if (selected.length) renderGalleryItems(selected);
+          // Mantém as oito associações foto/legenda definidas no HTML.
+          // O catálogo completo continua disponível no Studio, sem substituir a galeria publicada.
         }
       })();
 
