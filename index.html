@@ -110,9 +110,118 @@
       line-clamp: 4;
       overflow: hidden;
     }
+
+    /* Modo Editor Visual de Caixas de Texto e Posicionamento */
+    body.studio-visual-edit .pro-card,
+    body.studio-visual-edit .pro-card:hover {
+      transform: none !important;
+      transition: none !important;
+    }
+
+    body.studio-visual-edit [data-studio-editable] {
+      outline: 2px dashed rgba(239, 35, 60, 0.85) !important;
+      outline-offset: 4px;
+      border-radius: 6px;
+      cursor: grab !important;
+      position: relative;
+      z-index: 25;
+      user-select: none;
+    }
+
+    body.studio-visual-edit [data-studio-editable][contenteditable="true"] {
+      outline: 2px solid #FBBF24 !important;
+      background-color: rgba(15, 23, 42, 0.92) !important;
+      cursor: text !important;
+      user-select: text !important;
+    }
+
+    body.studio-visual-edit [data-studio-editable]:hover {
+      outline: 2px solid #EF233C !important;
+      background-color: rgba(220, 20, 60, 0.14);
+    }
+
+    body.studio-visual-edit img {
+      outline: 2px dashed rgba(52, 211, 153, 0.9) !important;
+      outline-offset: -3px;
+      cursor: pointer !important;
+      position: relative;
+      z-index: 25;
+    }
+
+    body.studio-visual-edit img:hover {
+      filter: brightness(1.1);
+      outline: 3px solid #10B981 !important;
+    }
+
+    #studio-float-toolbar {
+      position: fixed;
+      z-index: 120;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 12px;
+      background: #0A0B0D;
+      border: 2px solid #EF233C;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.85);
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      user-select: none;
+    }
+
+    #studio-img-badge {
+      position: fixed;
+      z-index: 120;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 12px;
+      background: #0A0B0D;
+      border: 2px solid #10B981;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.85);
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      user-select: none;
+    }
   </style>
 </head>
 <body class="antialiased selection:bg-pro-red selection:text-white">
+
+  <!-- Input oculto para trocar qualquer foto do site com 1 clique no Studio -->
+  <input id="studio-single-img-input" type="file" accept="image/*" class="hidden" />
+
+  <!-- Barra Flutuante sobre Imagens para Trocar, Enquadrar e Dar Zoom -->
+  <div id="studio-img-badge">
+    <button type="button" onclick="triggerReplaceHoveredImage()" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold cursor-pointer">
+      🖼 Trocar Foto
+    </button>
+    <button type="button" onclick="adjustSelectedImageZoom(0.15)" class="px-2 py-1 rounded-lg bg-pro-card border border-pro-border hover:border-emerald-400 cursor-pointer" title="Aproximar (Zoom +)">
+      ＋
+    </button>
+    <button type="button" onclick="adjustSelectedImageZoom(-0.15)" class="px-2 py-1 rounded-lg bg-pro-card border border-pro-border hover:border-emerald-400 cursor-pointer" title="Afastar (Zoom -)">
+      －
+    </button>
+    <button type="button" onclick="resetSelectedImageFraming()" class="px-2 py-1 rounded-lg bg-pro-card border border-pro-border hover:text-pro-redBright cursor-pointer" title="Resetar enquadramento">
+      ↺
+    </button>
+    <span class="text-[10px] text-emerald-300 hidden sm:inline">Arraste ou use scroll</span>
+  </div>
+
+  <!-- Barra Flutuante de Posicionamento Direto sobre qualquer Caixa de Texto -->
+  <div id="studio-float-toolbar">
+    <span id="studio-box-drag" class="px-2.5 py-1 rounded-lg bg-pro-red text-white cursor-grab flex items-center gap-1" title="Segure e arraste para mover">
+      ✥ Arrastar
+    </span>
+    <button type="button" onclick="editSelectedBoxText()" class="px-2.5 py-1 rounded-lg bg-amber-500 text-black font-extrabold hover:bg-amber-400 cursor-pointer" title="Digitar novo texto">✎ Editar Texto</button>
+    <button type="button" onclick="nudgeSelectedBox(0, -10)" class="px-2 py-1 rounded bg-pro-card border border-pro-border hover:border-white cursor-pointer" title="Subir">↑</button>
+    <button type="button" onclick="nudgeSelectedBox(0, 10)" class="px-2 py-1 rounded bg-pro-card border border-pro-border hover:border-white cursor-pointer" title="Descer">↓</button>
+    <button type="button" onclick="nudgeSelectedBox(-10, 0)" class="px-2 py-1 rounded bg-pro-card border border-pro-border hover:border-white cursor-pointer" title="Esquerda">←</button>
+    <button type="button" onclick="nudgeSelectedBox(10, 0)" class="px-2 py-1 rounded bg-pro-card border border-pro-border hover:border-white cursor-pointer" title="Direita">→</button>
+    <button type="button" onclick="resetSelectedBoxPosition()" class="px-2 py-1 rounded bg-pro-card border border-pro-border hover:text-pro-redBright cursor-pointer" title="Resetar posição">↺</button>
+  </div>
 
   <!-- ===================================================================== -->
   <!-- STUDIO DE CURADORIA & PERSONALIZAÇÃO AVANÇADA (FLUTUANTE E MOVÍVEL)   -->
@@ -156,6 +265,9 @@
         </div>
 
         <div class="flex items-center gap-1.5">
+          <button type="button" id="studio-edit-mode-btn" onclick="toggleVisualBoxEditor()" class="px-3 py-1.5 rounded-lg bg-pro-black hover:bg-pro-red/20 border border-pro-border text-[11px] font-extrabold text-amber-300 uppercase tracking-wider cursor-pointer transition-colors">
+            ✥ Mover Caixas: OFF
+          </button>
           <label class="px-3 py-1.5 rounded-lg bg-pro-black hover:bg-pro-red/20 border border-pro-border hover:border-pro-red text-[11px] font-bold text-white cursor-pointer transition-colors">
             + Pasta Extraída
             <input id="studio-folder-input" type="file" webkitdirectory directory multiple class="hidden" />
@@ -182,11 +294,7 @@
           </div>
         </div>
 
-        <div id="studio-grid" class="p-4 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 flex-1">
-          <div class="col-span-full text-center py-10 text-slate-400 text-xs">
-            Clique em <strong class="text-white">"+ Pasta Extraída"</strong> acima e selecione a pasta <code class="text-pro-redBright">ProFitness</code> para escolher as fotos do Hero e da Galeria em tempo real.
-          </div>
-        </div>
+        <div id="studio-grid" class="p-4 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 flex-1"></div>
       </div>
 
       <!-- PAINEL 2: EDIÇÃO AO VIVO DE TEXTOS, HEADLINES E WHATSAPP -->
@@ -194,32 +302,32 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Nome da Academia (Logo)</label>
-            <input id="st-brand-name" type="text" value="PROFITNESS" oninput="liveUpdateBrand(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white" />
+            <input id="st-brand-name" type="text" value="PROFITNESS" oninput="liveUpdateBrand(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white focus:outline-none focus:border-pro-red" />
           </div>
           <div>
-            <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Subtítulo / Cidade</label>
-            <input id="st-brand-sub" type="text" value="Academia • SJRP" oninput="liveUpdateSub(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white" />
+            <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Subtítulo / Marca Secundária</label>
+            <input id="st-brand-sub" type="text" value="ACADEMIA" oninput="liveUpdateSub(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white focus:outline-none focus:border-pro-red" />
           </div>
         </div>
 
         <div>
           <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Título Principal (Hero H1)</label>
-          <input id="st-hero-title" type="text" value="Não é só musculação, é saúde e resultado!" oninput="liveUpdateHeroTitle(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white" />
+          <input id="st-hero-title" type="text" value="Não é só musculação, é saúde e resultado!" oninput="liveUpdateHeroTitle(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white focus:outline-none focus:border-pro-red" />
         </div>
 
         <div>
           <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Descrição Principal (Hero)</label>
-          <textarea id="st-hero-desc" rows="2" oninput="liveUpdateHeroDesc(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white resize-none">Estrutura completa, acompanhamento próximo e programas como o Desafio Treinamento Feminino e avaliação por Bioimpedância para você superar seus limites todos os dias.</textarea>
+          <textarea id="st-hero-desc" rows="2" oninput="liveUpdateHeroDesc(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white resize-none focus:outline-none focus:border-pro-red">Estrutura completa, acompanhamento próximo e programas como o Desafio Treinamento Feminino e avaliação por Bioimpedância para você superar seus limites todos os dias.</textarea>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">WhatsApp Oficial (somente números com DDI)</label>
-            <input id="st-wa-num" type="text" value="5519992066315" oninput="liveUpdateWhatsapp(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white" />
+            <input id="st-wa-num" type="text" value="5519992066315" oninput="liveUpdateWhatsapp(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white focus:outline-none focus:border-pro-red" />
           </div>
           <div>
-            <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Telefone Exibido nos Botões</label>
-            <input id="st-wa-display" type="text" value="(19) 99206-6315" oninput="liveUpdatePhoneDisplay(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white" />
+            <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Telefone Exibido no Site</label>
+            <input id="st-wa-display" type="text" value="(19) 99206-6315" oninput="liveUpdatePhoneDisplay(this.value)" class="w-full px-3 py-2 rounded-lg bg-pro-black border border-pro-border text-xs text-white focus:outline-none focus:border-pro-red" />
           </div>
         </div>
       </div>
@@ -1389,6 +1497,7 @@
 
         handle.addEventListener('mousedown', (e) => {
           if (e.target.closest('button')) return;
+          e.preventDefault();
           startDrag(e.clientX, e.clientY);
         });
         window.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
@@ -1434,13 +1543,20 @@
 
       // Funções de Edição Ao Vivo do Studio
       window.liveUpdateBrand = function (val) {
+        const clean = (val || 'PROFITNESS').trim();
         const brandEl = document.querySelector('header a span.font-impact');
-        if (brandEl) brandEl.textContent = val || 'PROFITNESS';
+        if (brandEl) {
+          if (clean.toUpperCase().startsWith('PRO') && clean.length > 3) {
+            brandEl.innerHTML = `<span class="text-[#C81E1E]">${escapeHtml(clean.slice(0, 3))}</span><span class="text-white">${escapeHtml(clean.slice(3))}</span>`;
+          } else {
+            brandEl.textContent = clean;
+          }
+        }
       };
 
       window.liveUpdateSub = function (val) {
-        const subEl = document.querySelector('header a span.tracking-\\[0\\.42em\\]');
-        if (subEl) subEl.textContent = val;
+        const subEl = document.querySelector('header a span.uppercase.mt-1');
+        if (subEl) subEl.textContent = val || 'ACADEMIA';
       };
 
       window.liveUpdateHeroTitle = function (val) {
@@ -1461,8 +1577,8 @@
       };
 
       window.liveUpdatePhoneDisplay = function (txt) {
-        document.querySelectorAll('a[href*="wa.me/"] span').forEach(sp => {
-          if (sp.textContent.includes('(')) sp.textContent = txt;
+        document.querySelectorAll('#planos strong.whitespace-nowrap, footer a[href*="wa.me/"]').forEach(el => {
+          el.textContent = txt;
         });
       };
 
@@ -1497,19 +1613,350 @@
         }
       };
 
+      // Sincroniza itens atuais da página para o Studio caso nenhuma pasta tenha sido importada ainda
+      function seedStudioFromCurrentDom() {
+        if (studioItems.length > 0) return;
+        const seeded = [];
+
+        const heroMainImg = document.getElementById('hero-main-img');
+        const heroMainCap = document.getElementById('hero-main-caption');
+        if (heroMainImg && heroMainImg.getAttribute('src')) {
+          seeded.push({
+            id: 1,
+            url: heroMainImg.getAttribute('src'),
+            origem: 'insta',
+            legenda: (heroMainCap?.textContent || '').trim(),
+            nome: heroMainImg.getAttribute('src').split('/').pop(),
+            selected: true,
+            role: 'heroMain'
+          });
+        }
+
+        const heroSideImg = document.getElementById('hero-side-img');
+        const heroSideCap = document.getElementById('hero-side-caption');
+        if (heroSideImg && heroSideImg.getAttribute('src')) {
+          seeded.push({
+            id: 2,
+            url: heroSideImg.getAttribute('src'),
+            origem: 'insta',
+            legenda: (heroSideCap?.textContent || '').trim(),
+            nome: heroSideImg.getAttribute('src').split('/').pop(),
+            selected: true,
+            role: 'heroSide'
+          });
+        }
+
+        document.querySelectorAll('#gallery-grid figure').forEach((fig, idx) => {
+          const img = fig.querySelector('img');
+          const p = fig.querySelector('figcaption p');
+          const src = img ? img.getAttribute('src') : '';
+          if (!src || seeded.some(s => s.url === src)) return;
+          seeded.push({
+            id: seeded.length + 1,
+            url: src,
+            origem: fig.getAttribute('data-origin') === 'maps' ? 'maps' : 'insta',
+            legenda: (p?.textContent || '').trim(),
+            nome: src.split('/').pop() || `foto_${idx + 1}`,
+            selected: true,
+            role: 'gallery'
+          });
+        });
+
+        studioItems = seeded;
+      }
+
       window.toggleStudio = function (forceOpen) {
         const drawer = document.getElementById('studio-drawer');
         if (!drawer) return;
         const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : drawer.classList.contains('hidden');
         drawer.classList.toggle('hidden', !shouldOpen);
         if (shouldOpen) {
+          seedStudioFromCurrentDom();
+          if (!visualEditEnabled) toggleVisualBoxEditor(true);
           const body = document.getElementById('studio-body');
           const minBtn = document.getElementById('studio-min-btn');
           if (body) body.classList.remove('hidden');
           if (minBtn) minBtn.textContent = '—';
           renderStudioGrid();
+        } else if (visualEditEnabled) {
+          toggleVisualBoxEditor(false);
         }
       };
+
+      // =====================================================================
+      // EDITOR VISUAL DE CAIXAS DE TEXTO (CLICAR, EDITAR E ARRASTAR POSIÇÃO)
+      // =====================================================================
+      let visualEditEnabled = false;
+      let activeEditableBox = null;
+      let targetImageToReplace = null;
+      let hoveredImageEl = null;
+
+      const singleImgInput = document.getElementById('studio-single-img-input');
+      const imgBadge = document.getElementById('studio-img-badge');
+
+      window.triggerReplaceHoveredImage = function () {
+        if (!hoveredImageEl || !singleImgInput) return;
+        targetImageToReplace = hoveredImageEl;
+        singleImgInput.click();
+      };
+
+      function positionImgBadge(img) {
+        if (!imgBadge || !img || !visualEditEnabled) return;
+        const r = img.getBoundingClientRect();
+        imgBadge.style.display = 'inline-flex';
+        imgBadge.style.left = Math.max(8, Math.min(r.left + 8, window.innerWidth - imgBadge.offsetWidth - 8)) + 'px';
+        imgBadge.style.top = Math.max(8, r.top + 8) + 'px';
+      }
+
+      window.adjustSelectedImageZoom = function (delta) {
+        if (!hoveredImageEl) return;
+        const curScale = parseFloat(hoveredImageEl.dataset.imgScale || '1');
+        const nextScale = Math.min(2.8, Math.max(0.6, +(curScale + delta).toFixed(2)));
+        hoveredImageEl.dataset.imgScale = String(nextScale);
+        hoveredImageEl.style.transform = `scale(${nextScale})`;
+        hoveredImageEl.style.transformOrigin = 'center center';
+      };
+
+      window.resetSelectedImageFraming = function () {
+        if (!hoveredImageEl) return;
+        hoveredImageEl.dataset.imgScale = '1';
+        hoveredImageEl.dataset.posX = '50';
+        hoveredImageEl.dataset.posY = '50';
+        hoveredImageEl.style.transform = '';
+        hoveredImageEl.style.objectPosition = '50% 50%';
+      };
+
+      if (singleImgInput) {
+        singleImgInput.addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (!file || !targetImageToReplace) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            targetImageToReplace.src = reader.result;
+            targetImageToReplace.removeAttribute('data-fallback');
+            targetImageToReplace = null;
+            singleImgInput.value = '';
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function positionFloatToolbar(el) {
+        const tb = document.getElementById('studio-float-toolbar');
+        if (!tb || !el || !visualEditEnabled) return;
+        const rect = el.getBoundingClientRect();
+        tb.style.display = 'flex';
+        tb.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - tb.offsetWidth - 8)) + 'px';
+        const topPos = rect.top - tb.offsetHeight - 8;
+        tb.style.top = (topPos < 8 ? rect.bottom + 8 : topPos) + 'px';
+      }
+
+      window.nudgeSelectedBox = function (dx, dy) {
+        if (!activeEditableBox) return;
+        const curX = parseFloat(activeEditableBox.dataset.tx || '0');
+        const curY = parseFloat(activeEditableBox.dataset.ty || '0');
+        const nextX = curX + dx;
+        const nextY = curY + dy;
+        activeEditableBox.dataset.tx = String(nextX);
+        activeEditableBox.dataset.ty = String(nextY);
+        activeEditableBox.style.transform = `translate(${nextX}px, ${nextY}px)`;
+        positionFloatToolbar(activeEditableBox);
+      };
+
+      window.editSelectedBoxText = function () {
+        if (!activeEditableBox) return;
+        activeEditableBox.setAttribute('contenteditable', 'true');
+        activeEditableBox.focus();
+        // Seleciona o texto para facilitar a digitação imediata
+        try {
+          const range = document.createRange();
+          range.selectNodeContents(activeEditableBox);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        } catch (_) {}
+      };
+
+      window.resetSelectedBoxPosition = function () {
+        if (!activeEditableBox) return;
+        activeEditableBox.dataset.tx = '0';
+        activeEditableBox.dataset.ty = '0';
+        activeEditableBox.style.transform = '';
+        positionFloatToolbar(activeEditableBox);
+      };
+
+      window.toggleVisualBoxEditor = function (forceState) {
+        visualEditEnabled = typeof forceState === 'boolean' ? forceState : !visualEditEnabled;
+        document.body.classList.toggle('studio-visual-edit', visualEditEnabled);
+        const btn = document.getElementById('studio-edit-mode-btn');
+        const tb = document.getElementById('studio-float-toolbar');
+        if (btn) {
+          btn.textContent = visualEditEnabled ? '✥ Mover Caixas: ON' : '✥ Mover Caixas: OFF';
+          btn.classList.toggle('bg-pro-red', visualEditEnabled);
+          btn.classList.toggle('text-white', visualEditEnabled);
+        }
+
+        if (visualEditEnabled) {
+          const selectors = [
+            'section h1', 'section h2', 'section h3', 'section p',
+            'section span.inline-flex', 'section span.inline-block',
+            'section figcaption', 'section ul',
+            'footer span', 'footer div > a'
+          ];
+          document.querySelectorAll(selectors.join(',')).forEach(el => {
+            if (el.closest('#studio-drawer') || el.closest('#studio-float-toolbar') || el.closest('#studio-img-badge') || el.closest('button')) return;
+            el.setAttribute('data-studio-editable', '1');
+          });
+        } else {
+          document.querySelectorAll('[data-studio-editable]').forEach(el => {
+            el.removeAttribute('contenteditable');
+          });
+          if (tb) tb.style.display = 'none';
+          if (imgBadge) imgBadge.style.display = 'none';
+          activeEditableBox = null;
+          hoveredImageEl = null;
+        }
+      };
+
+      // Arraste direto de qualquer caixa de texto + enquadramento/zoom direto sobre qualquer imagem
+      (function setupDirectPageDragAndImageSwap() {
+        let draggingBox = null;
+        let draggingImg = null;
+        let startX = 0, startY = 0, baseX = 0, baseY = 0;
+
+        document.addEventListener('pointermove', (e) => {
+          if (!visualEditEnabled) return;
+          if (draggingImg) {
+            const rect = draggingImg.getBoundingClientRect();
+            const dxPct = ((e.clientX - startX) / Math.max(1, rect.width)) * 100;
+            const dyPct = ((e.clientY - startY) / Math.max(1, rect.height)) * 100;
+            const nextPosX = Math.min(100, Math.max(0, baseX - dxPct));
+            const nextPosY = Math.min(100, Math.max(0, baseY - dyPct));
+            draggingImg.dataset.posX = nextPosX.toFixed(1);
+            draggingImg.dataset.posY = nextPosY.toFixed(1);
+            draggingImg.style.objectPosition = `${nextPosX.toFixed(1)}% ${nextPosY.toFixed(1)}%`;
+            return;
+          }
+
+          if (draggingBox) {
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            const nextX = baseX + dx;
+            const nextY = baseY + dy;
+            draggingBox.dataset.tx = String(nextX);
+            draggingBox.dataset.ty = String(nextY);
+            draggingBox.style.transform = `translate(${nextX}px, ${nextY}px)`;
+            positionFloatToolbar(draggingBox);
+            return;
+          }
+
+          if (e.target.closest('#studio-drawer') || e.target.closest('#studio-float-toolbar') || e.target.closest('#studio-img-badge')) return;
+          const img = e.target.closest('img');
+          if (img && imgBadge) {
+            hoveredImageEl = img;
+            positionImgBadge(img);
+          } else if (imgBadge && !e.target.closest('#studio-img-badge')) {
+            imgBadge.style.display = 'none';
+          }
+        });
+
+        document.addEventListener('wheel', (e) => {
+          if (!visualEditEnabled) return;
+          const img = e.target.closest('img');
+          if (!img || e.target.closest('#studio-drawer')) return;
+          e.preventDefault();
+          hoveredImageEl = img;
+          positionImgBadge(img);
+          window.adjustSelectedImageZoom(e.deltaY < 0 ? 0.1 : -0.1);
+        }, { passive: false });
+
+        document.addEventListener('pointerdown', (e) => {
+          if (!visualEditEnabled) return;
+          if (e.target.closest('#studio-drawer') || e.target.closest('#studio-floating-launcher')) return;
+
+          // Se clicou nos controles da barra flutuante da imagem
+          if (e.target.closest('#studio-img-badge')) {
+            return;
+          }
+
+          // Se clicou diretamente em uma imagem: ativa seleção e inicia arraste do enquadramento dentro do quadro
+          const clickedImg = e.target.closest('img');
+          if (clickedImg) {
+            e.preventDefault();
+            e.stopPropagation();
+            hoveredImageEl = clickedImg;
+            positionImgBadge(clickedImg);
+            draggingImg = clickedImg;
+            startX = e.clientX;
+            startY = e.clientY;
+            baseX = parseFloat(clickedImg.dataset.posX || '50');
+            baseY = parseFloat(clickedImg.dataset.posY || '50');
+            return;
+          }
+
+          // Se clicou na alça "✥ Arrastar" da toolbar
+          if (e.target.closest('#studio-box-drag') && activeEditableBox) {
+            e.preventDefault();
+            e.stopPropagation();
+            draggingBox = activeEditableBox;
+            startX = e.clientX;
+            startY = e.clientY;
+            baseX = parseFloat(draggingBox.dataset.tx || '0');
+            baseY = parseFloat(draggingBox.dataset.ty || '0');
+            return;
+          }
+
+          if (e.target.closest('#studio-float-toolbar')) return;
+
+          const box = e.target.closest('[data-studio-editable]');
+          if (!box) return;
+
+          if (box.getAttribute('contenteditable') === 'true' && document.activeElement === box) {
+            activeEditableBox = box;
+            positionFloatToolbar(box);
+            return;
+          }
+
+          // Sai do modo digitação de outra caixa se houver
+          if (activeEditableBox && activeEditableBox !== box) {
+            activeEditableBox.removeAttribute('contenteditable');
+          }
+
+          e.preventDefault();
+          e.stopPropagation();
+          draggingBox = box;
+          activeEditableBox = box;
+          startX = e.clientX;
+          startY = e.clientY;
+          baseX = parseFloat(box.dataset.tx || '0');
+          baseY = parseFloat(box.dataset.ty || '0');
+          positionFloatToolbar(box);
+        }, true);
+
+        window.addEventListener('pointerup', () => {
+          draggingBox = null;
+          draggingImg = null;
+        });
+
+        document.addEventListener('dblclick', (e) => {
+          if (!visualEditEnabled) return;
+          const box = e.target.closest('[data-studio-editable]');
+          if (box) {
+            e.preventDefault();
+            e.stopPropagation();
+            activeEditableBox = box;
+            window.editSelectedBoxText();
+          }
+        }, true);
+
+        document.addEventListener('click', (e) => {
+          if (!visualEditEnabled) return;
+          if (e.target.closest('a, button') && !e.target.closest('#studio-drawer') && !e.target.closest('#studio-float-toolbar') && !e.target.closest('#studio-img-badge') && !e.target.closest('#studio-floating-launcher')) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }, true);
+      })();
 
       window.applyStudioToSite = function (closeAfter) {
         const chosen = studioItems.filter(i => i.selected);
@@ -1522,11 +1969,11 @@
           const heroSideCap = document.getElementById('hero-side-caption');
           if (heroMainImg && mainItem) {
             heroMainImg.src = mainItem.url;
-            if (heroMainCap && mainItem.legenda) heroMainCap.textContent = mainItem.legenda;
+            if (heroMainCap) heroMainCap.textContent = mainItem.legenda || '';
           }
           if (heroSideImg && sideItem) {
             heroSideImg.src = sideItem.url;
-            if (heroSideCap && sideItem.legenda) heroSideCap.textContent = sideItem.legenda;
+            if (heroSideCap) heroSideCap.textContent = sideItem.legenda || '';
           }
           renderGalleryItems(chosen);
         }
@@ -1853,7 +2300,7 @@
             }
           });
 
-          // Mantém a seleção editorial fixa do HTML; evita trocar as fotos após o carregamento do CSV.
+          if (selected.length) renderGalleryItems(selected);
         }
       })();
 
@@ -1968,12 +2415,15 @@
         const selectedItems = studioItems.filter(i => i.selected);
         if (selCountEl) selCountEl.textContent = selectedItems.length;
 
-        if (!studioItems.length) return;
+        if (!studioItems.length) {
+          grid.innerHTML = `<div class="col-span-full text-center py-10 text-slate-400 text-xs">Clique em <strong class="text-white">"+ Pasta Extraída"</strong> acima para carregar todas as fotos da pasta <code class="text-pro-redBright">ProFitness</code>.</div>`;
+          return;
+        }
 
         const filtered = studioItems.filter(item => {
           if (studioFilter === 'selected' && !item.selected) return false;
           if (studioFilter === 'maps' && item.origem !== 'maps') return false;
-          if (studioFilter === 'insta' && (item.origem !== 'insta' || !item.legenda)) return false;
+          if (studioFilter === 'insta' && item.origem !== 'insta') return false;
           if (studioQuery) {
             const q = studioQuery.toLowerCase();
             if (!item.legenda.toLowerCase().includes(q) && !item.nome.toLowerCase().includes(q)) return false;
@@ -1994,12 +2444,20 @@
               </div>
               <div class="p-3 space-y-2 flex-1 flex flex-col justify-between">
                 <textarea rows="2" placeholder="Digite ou edite a legenda para o site..."
-                  onchange="updateStudioCaption(${realIdx}, this.value)"
+                  oninput="updateStudioCaption(${realIdx}, this.value)"
                   class="w-full px-2.5 py-1.5 rounded-lg bg-pro-black border border-pro-border text-xs text-slate-200 focus:outline-none focus:border-pro-red resize-none">${escapeHtml(item.legenda)}</textarea>
-                <div class="flex items-center gap-1.5">
+                <div class="flex items-center gap-1">
                   <button type="button" onclick="toggleStudioSelect(${realIdx})"
-                    class="flex-1 py-1.5 rounded-lg text-[11px] font-extrabold uppercase cursor-pointer ${item.selected ? 'bg-pro-red text-white' : 'bg-pro-black text-slate-300 border border-pro-border'}">
-                    ${item.selected ? '✓ No Site' : '+ Selecionar'}
+                    class="flex-1 py-1.5 rounded-lg text-[10px] font-extrabold uppercase cursor-pointer ${item.selected ? 'bg-pro-red text-white' : 'bg-pro-black text-slate-300 border border-pro-border'}">
+                    ${item.selected ? '✓ No Site' : '+ Usar'}
+                  </button>
+                  <button type="button" onclick="moveStudioItem(${realIdx}, -1)" title="Mover antes"
+                    class="px-2 py-1.5 rounded-lg bg-pro-black border border-pro-border hover:border-white text-[10px] font-bold text-slate-300 cursor-pointer">
+                    ↑
+                  </button>
+                  <button type="button" onclick="moveStudioItem(${realIdx}, 1)" title="Mover depois"
+                    class="px-2 py-1.5 rounded-lg bg-pro-black border border-pro-border hover:border-white text-[10px] font-bold text-slate-300 cursor-pointer">
+                    ↓
                   </button>
                   <button type="button" onclick="setStudioRole(${realIdx}, 'heroMain')" title="Definir como Capa Principal"
                     class="px-2 py-1.5 rounded-lg bg-pro-black border border-pro-border hover:border-pro-red text-[10px] font-bold text-slate-300 cursor-pointer">
@@ -2016,15 +2474,28 @@
         }).join('');
       }
 
+      window.moveStudioItem = function (idx, dir) {
+        const target = idx + dir;
+        if (target < 0 || target >= studioItems.length) return;
+        const temp = studioItems[idx];
+        studioItems[idx] = studioItems[target];
+        studioItems[target] = temp;
+        applyStudioToSite(false);
+        renderStudioGrid();
+      };
+
       window.toggleStudioSelect = function (idx) {
         if (!studioItems[idx]) return;
         studioItems[idx].selected = !studioItems[idx].selected;
         if (!studioItems[idx].selected) studioItems[idx].role = 'gallery';
+        applyStudioToSite(false);
         renderStudioGrid();
       };
 
       window.updateStudioCaption = function (idx, val) {
-        if (studioItems[idx]) studioItems[idx].legenda = val;
+        if (!studioItems[idx]) return;
+        studioItems[idx].legenda = val;
+        applyStudioToSite(false);
       };
 
       window.setStudioRole = function (idx, role) {
@@ -2032,6 +2503,7 @@
         studioItems.forEach(i => { if (i.role === role) i.role = 'gallery'; });
         studioItems[idx].selected = true;
         studioItems[idx].role = role;
+        applyStudioToSite(false);
         renderStudioGrid();
       };
 
@@ -2055,11 +2527,16 @@
           }
         }
         applyStudioToSite(false);
+        if (visualEditEnabled) toggleVisualBoxEditor(false);
         const clone = document.documentElement.cloneNode(true);
         const drawer = clone.querySelector('#studio-drawer');
         if (drawer) drawer.remove();
         const launcher = clone.querySelector('#studio-floating-launcher');
         if (launcher) launcher.remove();
+        const floatTb = clone.querySelector('#studio-float-toolbar');
+        if (floatTb) floatTb.remove();
+        const badgeImg = clone.querySelector('#studio-img-badge');
+        if (badgeImg) badgeImg.remove();
         const htmlOut = '<!DOCTYPE html>\n' + clone.outerHTML;
         const blob = new Blob([htmlOut], { type: 'text/html;charset=utf-8' });
         const a = document.createElement('a');
