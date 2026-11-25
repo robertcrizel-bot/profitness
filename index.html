@@ -184,7 +184,7 @@
 
         <div id="studio-grid" class="p-4 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 flex-1">
           <div class="col-span-full text-center py-10 text-slate-400 text-xs">
-            Clique em <strong class="text-white">"+ Pasta Extraída"</strong> acima e selecione a pasta <code class="text-pro-redBright">instagram</code> para escolher as fotos do Hero e da Galeria em tempo real.
+            Clique em <strong class="text-white">"+ Pasta Extraída"</strong> acima e selecione a pasta <code class="text-pro-redBright">ProFitness</code> para escolher as fotos do Hero e da Galeria em tempo real.
           </div>
         </div>
       </div>
@@ -515,7 +515,7 @@
         </p>
       </div>
 
-      <!-- Grade Direta de Fotos + Legendas (Caminhos Exatos em C:\Users\Família\Desktop\ProFitness) -->
+      <!-- Grade Direta de Fotos + Legendas -->
       <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <figure data-origin="insta" class="pro-card rounded-2xl overflow-hidden bg-pro-card border border-pro-border flex flex-col">
           <div class="aspect-[4/3] bg-pro-black overflow-hidden">
@@ -1088,7 +1088,6 @@
         </article>
       </div>
 
-      <!-- Botão Carregar +6 Avaliações -->
       <!-- Botão Carregar Mais Avaliações / Google -->
       <div id="reviews-more-wrap" class="mt-8 text-center">
         <button
@@ -1331,6 +1330,26 @@
       let studioFilter = 'all';
       let studioQuery = '';
 
+      // Menu mobile
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const iconMenu = document.getElementById('icon-menu');
+      const iconClose = document.getElementById('icon-close');
+      if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+          const isHidden = mobileMenu.classList.toggle('hidden');
+          if (iconMenu) iconMenu.classList.toggle('hidden', !isHidden);
+          if (iconClose) iconClose.classList.toggle('hidden', isHidden);
+        });
+        document.querySelectorAll('.mobile-link').forEach(link => {
+          link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            if (iconMenu) iconMenu.classList.remove('hidden');
+            if (iconClose) iconClose.classList.add('hidden');
+          });
+        });
+      }
+
       // =====================================================================
       // JANELA MOVÍVEL (DRAGGABLE) DO STUDIO SITE FACTORY (MOUSE + TOUCH)
       // =====================================================================
@@ -1413,14 +1432,14 @@
         });
       });
 
-      // Funções de Edição Ao Vivo do Studio (igual VetBela)
+      // Funções de Edição Ao Vivo do Studio
       window.liveUpdateBrand = function (val) {
         const brandEl = document.querySelector('header a span.font-impact');
         if (brandEl) brandEl.textContent = val || 'PROFITNESS';
       };
 
       window.liveUpdateSub = function (val) {
-        const subEl = document.querySelector('header a span.tracking-\\[0\\.24em\\]');
+        const subEl = document.querySelector('header a span.tracking-\\[0\\.42em\\]');
         if (subEl) subEl.textContent = val;
       };
 
@@ -1628,14 +1647,6 @@
       // Atualiza estado inicial do botão de avaliações
       renderReviews(null, true);
 
-      const loadMoreReviewsBtn = document.getElementById('load-more-reviews-btn');
-      if (loadMoreReviewsBtn) {
-        loadMoreReviewsBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          window.handleReviewsAction();
-        });
-      }
-
       function renderGalleryItems(entries) {
         const galleryGrid = document.getElementById('gallery-grid');
         if (!galleryGrid || !entries.length) return;
@@ -1683,7 +1694,7 @@
           const cleanCaption = String(item.legenda || '')
             .replace(/https?:\/\/\S+/g, '')
             .replace(/#[\p{L}\p{N}_]+/gu, '')
-            .replace(/[⠀⁣]/g, ' ')
+            .replace(/[\u2800\u2063]/g, ' ')
             .replace(/\s+/g, ' ')
             .trim();
           const text = cleanCaption || (isMaps
@@ -1735,7 +1746,6 @@
       }
 
       (async function autoLoadExtractedData() {
-        // 1. Se existir DADOS_PROFITNESS.js gerado localmente, aplica instantaneamente sem bloqueio de file://
         if (window.SITE_DATA_LOCAL) {
           const d = window.SITE_DATA_LOCAL;
           if (Array.isArray(d.avaliacoes) && d.avaliacoes.length) renderReviews(d.avaliacoes);
@@ -1756,7 +1766,6 @@
         const csvText = await loadLocalText('ProFitness/CATALOGO_academiaprofitness_sjrp.csv')
           || await loadLocalText('CATALOGO_academiaprofitness_sjrp.csv');
         if (csvText) {
-          // Leitura correta do CSV, inclusive legendas com quebras de linha e ponto e vírgula.
           function parseSemicolonCsv(input) {
             const rows = [];
             let row = [], value = '', quoted = false;
@@ -1788,9 +1797,6 @@
               };
             });
 
-          // Seleção editorial: prioriza publicações com conteúdo real sobre estrutura,
-          // equipe, acompanhamento e modalidades; evita começar por fotos sem legenda do Maps.
-          // Usa o catálogo inteiro: uma foto por publicação e seleção equilibrada por assunto.
           const categoryRules = [
             /equipe|professor|profissionais|personal|fundador|instrutor/i,
             /inbody|bioimped|avaliação corporal|composição corporal/i,
@@ -1800,20 +1806,21 @@
             /desafio|evento|aulão|competição|encerramento|aniversário/i,
             /saúde|bem.?estar|qualidade de vida|atividade física/i
           ];
+
           const normalizeCaption = value => String(value || '')
             .toLowerCase()
-            .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')
-            .replace(/https?:\\/\\/\\S+/g, '')
-            .replace(/#[^\\s]+/g, '')
-            .replace(/[\\u2800-\\u28ff\\u200b-\\u200f]/g, ' ')
-            .replace(/\\s+/g, ' ')
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/https?:\/\/\S+/g, '')
+            .replace(/#[^\s]+/g, '')
+            .replace(/[\u2800-\u28ff\u200b-\u200f]/g, ' ')
+            .replace(/\s+/g, ' ')
             .trim();
 
           const seenPosts = new Set();
           const candidates = parsed
             .filter(item => item.origem === 'insta' && item.legenda.length > 25)
             .filter(item => {
-              const postId = item.nome.split('_')[0].replace(/\\.[^.]+$/, '');
+              const postId = item.nome.split('_')[0].replace(/\.[^.]+$/, '');
               if (!postId || seenPosts.has(postId)) return false;
               seenPosts.add(postId);
               const caption = normalizeCaption(item.legenda);
@@ -1836,7 +1843,6 @@
             }
           });
 
-          // Completa com publicações diferentes, sem repetir a mesma legenda ou post.
           candidates.forEach(item => {
             if (selected.length >= 12) return;
             const key = normalizeCaption(item.legenda);
@@ -1851,7 +1857,7 @@
         }
       })();
 
-      // 2. Importação 1-Clique da pasta inteira extraída (fotos + CSV + JSON de metadados e avaliações)
+      // 2. Importação 1-Clique da pasta inteira extraída
       async function processUploadedFolder(allFiles) {
         if (!allFiles.length) return;
 
@@ -1908,15 +1914,6 @@
         const seenFiles = new Set();
         const loadedList = [];
 
-        function fileToDataUrl(file) {
-          return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = () => resolve(URL.createObjectURL(file));
-            reader.readAsDataURL(file);
-          });
-        }
-
         for (const f of allFiles) {
           if (!f.type.startsWith('image/') || seenFiles.has(f.name)) continue;
           const rel = (f.webkitRelativePath || f.name).replace(/\\/g, '/');
@@ -1934,11 +1931,10 @@
             legenda: cap,
             nome: f.name,
             selected: false,
-            role: 'gallery' // 'heroMain' | 'heroSide' | 'gallery'
+            role: 'gallery'
           });
         }
 
-        // Pré-seleciona automaticamente as melhores fotos do Google Maps e do Feed com legenda
         const mapsImgs = loadedList.filter(i => i.origem === 'maps');
         const instaImgs = loadedList.filter(i => i.origem === 'insta' && i.legenda.length > 10);
         const autoPick = [...mapsImgs.slice(0, 6), ...instaImgs.slice(0, 6)];
@@ -1948,7 +1944,6 @@
           else if (idx === 1) item.role = 'heroSide';
         });
 
-        // Ordena para que as aprovadas e com legenda apareçam primeiro no Studio
         loadedList.sort((a, b) => {
           if (a.selected !== b.selected) return a.selected ? -1 : 1;
           if (a.origem !== b.origem) return a.origem === 'maps' ? -1 : 1;
